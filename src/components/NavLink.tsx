@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 type LinkProps = {
     title: string
     link: string
@@ -10,10 +12,9 @@ export const NavLink = (props: LinkProps) => {
 
     return (
         <li className="flex">
-            <a rel="noopener noreferrer" href={props.link} 
-                className={props.isActive ? activeStyle : baseStyle}>
+            <Link to={props.link} className={props.isActive ? activeStyle : baseStyle}>
                 {props.title}
-            </a>
+            </Link>
         </li>
     )
 }

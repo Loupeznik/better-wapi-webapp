@@ -1,25 +1,31 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@tailwindcss/forms': ^0.5.3
+  '@types/js-cookie': ^3.0.2
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
   '@vitejs/plugin-react-swc': ^3.0.0
   autoprefixer: ^10.4.13
+  js-cookie: ^3.0.1
   openapi-typescript-codegen: ^0.23.0
   postcss: ^8.4.21
   react: ^18.2.0
   react-dom: ^18.2.0
-  react-secure-storage: ^1.0.22
+  react-router-dom: ^6.8.1
   tailwindcss: ^3.2.4
   typescript: ^4.9.3
   vite: ^4.1.0
 
 dependencies:
+  js-cookie: 3.0.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
-  react-secure-storage: 1.0.22
+  react-router-dom: 6.8.1_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
+  '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.4
+  '@types/js-cookie': 3.0.2
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
   '@vitejs/plugin-react-swc': 3.1.0_vite@4.1.1
@@ -264,6 +270,11 @@ packages:
       fastq: 1.15.0
     dev: true
 
+  /@remix-run/router/1.3.2:
+    resolution: {integrity: sha512-t54ONhl/h75X94SWsHGQ4G/ZrCEguKSRQr7DrjTciJXW0YU1QhlwYeycvK5JgkzlxmvrK7wq1NB/PLtHxoiDcA==}
+    engines: {node: '>=14'}
+    dev: false
+
   /@swc/core-darwin-arm64/1.3.32:
     resolution: {integrity: sha512-o19bhlxuUgjUElm6i+QhXgZ0vD6BebiB/gQpK3en5aAwhOvinwr4sah3GqFXsQzz/prKVDuMkj9SW6F/Ug5hgg==}
     engines: {node: '>=10'}
@@ -369,6 +380,19 @@ packages:
       '@swc/core-win32-arm64-msvc': 1.3.32
       '@swc/core-win32-ia32-msvc': 1.3.32
       '@swc/core-win32-x64-msvc': 1.3.32
+    dev: true
+
+  /@tailwindcss/forms/0.5.3_tailwindcss@3.2.4:
+    resolution: {integrity: sha512-y5mb86JUoiUgBjY/o6FJSFZSEttfb3Q5gllE4xoKjAAD+vBrnIhE4dViwUuow3va8mpH4s9jyUbUbrRGoRdc2Q==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1'
+    dependencies:
+      mini-svg-data-uri: 1.4.4
+      tailwindcss: 3.2.4_postcss@8.4.21
+    dev: true
+
+  /@types/js-cookie/3.0.2:
+    resolution: {integrity: sha512-6+0ekgfusHftJNYpihfkMu8BWdeHs9EOJuGcSofErjstGPfPGEu9yTu4t460lTzzAMl2cM5zngQJqPMHbbnvYA==}
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -521,10 +545,6 @@ packages:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
     dev: true
-
-  /crypto-js/4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
-    dev: false
 
   /cssesc/3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -714,6 +734,11 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: true
 
+  /js-cookie/3.0.1:
+    resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}
+    engines: {node: '>=12'}
+    dev: false
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
@@ -766,13 +791,14 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /mini-svg-data-uri/1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
+    dev: true
+
   /minimist/1.2.7:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
     dev: true
-
-  /murmurhash-js/1.0.0:
-    resolution: {integrity: sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==}
-    dev: false
 
   /nanoid/3.3.4:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
@@ -921,11 +947,27 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-secure-storage/1.0.22:
-    resolution: {integrity: sha512-/Cc1uPynXMG1rdjRSNg6nSCDz2RYGIkFab0axUiZ4ne3ZrtGWBbRNJ9474oLI+MTFj9LupN9832j0rV9kr8D+A==}
+  /react-router-dom/6.8.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-67EXNfkQgf34P7+PSb6VlBuaacGhkKn3kpE51+P6zYSG2kiRoumXEL6e27zTa9+PGF2MNXbgIUHTVlleLbIcHQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
     dependencies:
-      crypto-js: 4.1.1
-      murmurhash-js: 1.0.0
+      '@remix-run/router': 1.3.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.8.1_react@18.2.0
+    dev: false
+
+  /react-router/6.8.1_react@18.2.0:
+    resolution: {integrity: sha512-Jgi8BzAJQ8MkPt8ipXnR73rnD7EmZ0HFFb7jdQU24TynGW1Ooqin2KVDN9voSC+7xhqbbCd2cjGUepb6RObnyg==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.3.2
+      react: 18.2.0
     dev: false
 
   /react/18.2.0:

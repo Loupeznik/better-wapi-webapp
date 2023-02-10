@@ -10,11 +10,14 @@
     "types:openapi": "openapi -i http://localhost:8000/docs/doc.json -o src/api"
   },
   "dependencies": {
+    "js-cookie": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-secure-storage": "^1.0.22"
+    "react-router-dom": "^6.8.1"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@types/js-cookie": "^3.0.2",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react-swc": "^3.0.0",

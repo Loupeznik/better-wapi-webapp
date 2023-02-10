@@ -1,31 +1,33 @@
-import secureLocalStorage from "react-secure-storage"
+import Cookies from "js-cookie"
 import { OpenAPI } from "../api"
 
-export class SecurityHelpers {
-    private _loginKey = "login"
-    private _passwordKey = "password"
-
-    public getCredentialsFromStorage() : boolean {
-        const login = secureLocalStorage.getItem(this._loginKey) as string
-        const password = secureLocalStorage.getItem(this._passwordKey) as string
-
-        if (login == "" || password == "") {
-            return false
-        }
-
-        OpenAPI.USERNAME = login
-        OpenAPI.PASSWORD = password
-
+const getCredentialsFromStorage = (): boolean => {
+    if (OpenAPI.USERNAME && OpenAPI.PASSWORD) {
         return true
     }
 
-    public saveCredentialsToStorage(login : string, password : string) : boolean {
-        if (login == "" || password == "") {
-            return false
-        }
+    const login = Cookies.get("login")
+    const password = Cookies.get("password")
 
-        secureLocalStorage.setItem(this._loginKey, login)
-        secureLocalStorage.setItem(this._passwordKey, password)
-        return true
+    if (!login || !password) {
+        return false
     }
+
+    OpenAPI.USERNAME = login
+    OpenAPI.PASSWORD = password
+
+    return true
 }
+
+const saveCredentialsToStorage = (login: string, password: string): boolean => {
+    if (!login || !password) {
+        return false
+    }
+
+    Cookies.set("login", login, { expires: 1 })
+    Cookies.set("password", password, { expires: 1 })
+
+    return true
+}
+
+export { getCredentialsFromStorage, saveCredentialsToStorage }

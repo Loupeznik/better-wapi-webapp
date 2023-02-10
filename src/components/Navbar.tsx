@@ -6,8 +6,8 @@ export const Navbar = () => {
             <div className="container flex justify-between h-16 mx-auto md:justify-center md:space-x-8">
                 <ul className="items-stretch hidden space-x-3 md:flex">
                     <NavLink title="Home" link="/" isActive={true} />
-                    <NavLink title="Create a DNS record" link="/" isActive={false} />
-                    <NavLink title="List DNS records" link="/" isActive={false} />
+                    <NavLink title="Create a DNS record" link="/new" isActive={false} />
+                    <NavLink title="List DNS records" link="/records" isActive={false} />
                 </ul>
             </div>
         </header>

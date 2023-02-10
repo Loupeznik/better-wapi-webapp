@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Button } from "../components/Button"
 
 export const HomePage = () => {
@@ -6,8 +7,8 @@ export const HomePage = () => {
             <h1 className="text-center text-3xl font-bold">Better WAPI</h1>
             <p className="mt-2">Better WAPI is a wrapper around the Wedos API (WAPI). Continue by create a new DNS record or listing available records for a certain domain.</p>
             <div className="my-8 flex flex-row flex-auto justify-center justify-around w-1/2 mx-auto">
-                <Button>Create a record</Button>
-                <Button>List records</Button>
+                <Link to="/new"><Button>Create a record</Button></Link>
+                <Link to="/records"><Button>List records</Button></Link>
             </div>
         </div>
     )
