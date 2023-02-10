@@ -1,10 +1,22 @@
 import secureLocalStorage from "react-secure-storage"
+import { OpenAPI } from "../api"
 
 export class SecurityHelpers {
-    private _storageKey = "basic_credentials"
+    private _loginKey = "login"
+    private _passwordKey = "password"
 
-    public getCredentialsFromStorage() : string {
-        return secureLocalStorage.getItem(this._storageKey) as string
+    public getCredentialsFromStorage() : boolean {
+        const login = secureLocalStorage.getItem(this._loginKey) as string
+        const password = secureLocalStorage.getItem(this._passwordKey) as string
+
+        if (login == "" || password == "") {
+            return false
+        }
+
+        OpenAPI.USERNAME = login
+        OpenAPI.PASSWORD = password
+
+        return true
     }
 
     public saveCredentialsToStorage(login : string, password : string) : boolean {
@@ -12,8 +24,8 @@ export class SecurityHelpers {
             return false
         }
 
-        const b64encoded = btoa(login + ":" + password)
-        secureLocalStorage.setItem(this._storageKey, b64encoded)
+        secureLocalStorage.setItem(this._loginKey, login)
+        secureLocalStorage.setItem(this._passwordKey, password)
         return true
     }
 }
