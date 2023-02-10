@@ -8,6 +8,7 @@ specifiers:
   postcss: ^8.4.21
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-secure-storage: ^1.0.22
   tailwindcss: ^3.2.4
   typescript: ^4.9.3
   vite: ^4.1.0
@@ -15,6 +16,7 @@ specifiers:
 dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-secure-storage: 1.0.22
 
 devDependencies:
   '@types/react': 18.0.27
@@ -483,6 +485,10 @@ packages:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
 
+  /crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
+
   /cssesc/3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -678,6 +684,10 @@ packages:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
     dev: true
 
+  /murmurhash-js/1.0.0:
+    resolution: {integrity: sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==}
+    dev: false
+
   /nanoid/3.3.4:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -808,6 +818,13 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-secure-storage/1.0.22:
+    resolution: {integrity: sha512-/Cc1uPynXMG1rdjRSNg6nSCDz2RYGIkFab0axUiZ4ne3ZrtGWBbRNJ9474oLI+MTFj9LupN9832j0rV9kr8D+A==}
+    dependencies:
+      crypto-js: 4.1.1
+      murmurhash-js: 1.0.0
     dev: false
 
   /react/18.2.0:
