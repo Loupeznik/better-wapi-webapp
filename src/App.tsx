@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import { CreateRecordPage } from './pages/Create'
 import { HomePage } from './pages/Home'
@@ -7,7 +6,7 @@ import { RecordsPage } from './pages/Records'
 
 function App() {
   return (
-    <div className="bg-stone-800 h-screen">
+    <div className="bg-stone-800">
       <Navbar />
       <div>
         <Routes>

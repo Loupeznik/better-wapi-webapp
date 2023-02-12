@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState } from "react"
-import { models_Record } from "../api"
+import { DomainService, models_Record } from "../api"
 import { Button } from "../components/Button"
 import { Login } from "../components/Login"
 import { getCredentialsFromStorage } from "../helpers/SecurityHelpers"
@@ -11,15 +11,25 @@ export const RecordsPage = () => {
 
     const domainRef = createRef<HTMLInputElement>();
 
-    const handleDomainChange = () => {
+    const handleDomainChange = async () => {
         if (domainRef.current) {
             setDomain(domainRef.current.value)
-        }
+
+            await getRecords(domainRef.current.value)
+        }        
     }
 
     useEffect(() => {
         setAuthenticated(getCredentialsFromStorage)
-    }, [isAuthenticated, activeDomain])
+    }, [activeDomain])
+
+    const getRecords = async (domain: string) => {
+        let records = await DomainService.getDomainInfo(domain)
+
+        if (records.length > 0) {
+            setSubdomains(records)
+        }
+    }
 
     const renderSearch = () => {
         return (
@@ -39,11 +49,11 @@ export const RecordsPage = () => {
         return (
             <div>
                 <div className="container p-2 mx-auto sm:p-4 dark:text-gray-100">
-                    <h2 className="mb-4 text-2xl font-semibold leading-tight">Invoices</h2>
+                    <h2 className="mb-4 text-2xl font-semibold leading-tight">Records</h2>
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-xs">
                             <thead className="dark:bg-gray-700">
-                                <tr className="text-left">
+                                <tr>
                                     <th className="p-3">Record ID</th>
                                     <th className="p-3">Name</th>
                                     <th className="p-3">TTL</th>
@@ -119,7 +129,6 @@ export const RecordsPage = () => {
             <div className="flex items-center justify-center space-x-4">
                 <input type="text" className="items-center p-5 w-3/4 mt-2 text-center rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     ref={domainRef} />
-
                 <span className="mt-2"><Button onClick={handleDomainChange}>Search</Button></span>
             </div>
             {renderList()}
