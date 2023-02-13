@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { saveCredentialsToStorage } from "../helpers/SecurityHelpers"
 
-export const Login = () => {
+
+export const Login = ({ setAuthenticated }: {
+    setAuthenticated: (value: boolean) => void
+}) => {
     const [login, setLogin] = useState<string>()
     const [password, setPassword] = useState<string>()
-    const navigate = useNavigate()
 
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => setLogin(event.target.value)
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
@@ -15,9 +16,7 @@ export const Login = () => {
 
         if (login && password) {
             saveCredentialsToStorage(login, password)
-            navigate('/records', {
-                replace: true
-            })
+            setAuthenticated(true)
         }
     }
 

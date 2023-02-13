@@ -16,12 +16,12 @@ export const RecordsPage = () => {
             setDomain(domainRef.current.value)
 
             await getRecords(domainRef.current.value)
-        }        
+        }
     }
 
     useEffect(() => {
-        setAuthenticated(getCredentialsFromStorage)
-    }, [activeDomain])
+        setAuthenticated(getCredentialsFromStorage())
+    }, [activeDomain, isAuthenticated])
 
     const getRecords = async (domain: string) => {
         let records = await DomainService.getDomainInfo(domain)
@@ -29,20 +29,6 @@ export const RecordsPage = () => {
         if (records.length > 0) {
             setSubdomains(records)
         }
-    }
-
-    const renderSearch = () => {
-        return (
-            <div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
-                <p>Select domain to list records</p>
-                <div className="flex items-center justify-center space-x-4">
-                    <input type="text" className="items-center p-5 w-3/4 mt-2 text-center rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                        ref={domainRef} />
-
-                    <span className="mt-2"><Button onClick={handleDomainChange}>Search</Button></span>
-                </div>
-            </div>
-        )
     }
 
     const renderList = () => {
@@ -123,8 +109,12 @@ export const RecordsPage = () => {
         )
     }
 
+    if (!isAuthenticated) {
+        return <Login setAuthenticated={(value: boolean) => setAuthenticated(value)} />
+    }
+
     return (
-        !isAuthenticated ? <Login /> : <div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
+        <div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
             <p>{!activeDomain ? 'Select domain to list records' : 'Listing records for domain ' + activeDomain}</p>
             <div className="flex items-center justify-center space-x-4">
                 <input type="text" className="items-center p-5 w-3/4 mt-2 text-center rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"

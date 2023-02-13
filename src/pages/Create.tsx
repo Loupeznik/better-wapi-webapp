@@ -33,36 +33,39 @@ export const CreateRecordPage = () => {
 
     useEffect(() => {
         setAuthenticated(getCredentialsFromStorage)
-    }, [])
+    }, [isAuthenticated])
+
+    if (!isAuthenticated) {
+        return <Login setAuthenticated={(value: boolean) => setAuthenticated(value)} />
+    }
 
     return (
-        !isAuthenticated ? <Login /> :
-            <div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
-                <h1 className="text-center text-3xl font-bold">Create a new record</h1>
-                <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto">
-                    <label htmlFor="domain" className="self-start mt-3 text-xs font-semibold">Domain</label>
-                    <input id="domain" type="text"
-                        className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                        onChange={handleDomainChange} />
-                    <label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">Subdomain</label>
-                    <input id="subdomain" type="text"
-                        className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                        onChange={handleSubdomainChange} />
-                    <label htmlFor="data" className="self-start mt-3 text-xs font-semibold">IP Address or Data</label>
-                    <input id="data" type="text"
-                        className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                        onChange={handleDataChange} />
-                    <div className="text-left py-2">
-                        <input type="checkbox" name="commit" id="commit" aria-label="Commit"
-                            className="mr-2 rounded-sm checked:bg-indigo-400 checked:focus:bg-indigo-400 checked:hover:bg-indigo-400"
-                            checked={autocommit}
-                            onChange={handleAutocommitChange} />
-                        <label htmlFor="commit" className="text-sm font-semibold">Commit</label>
-                    </div>
-                    <button type="submit" className="flex items-center justify-center h-12 px-6 mt-2 text-sm font-semibold rounded dark:bg-indigo-400 hover:bg-indigo-800">
-                        Save
-                    </button>
-                </form>
-            </div>
+        <div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
+            <h1 className="text-center text-3xl font-bold">Create a new record</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto">
+                <label htmlFor="domain" className="self-start mt-3 text-xs font-semibold">Domain</label>
+                <input id="domain" type="text"
+                    className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
+                    onChange={handleDomainChange} />
+                <label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">Subdomain</label>
+                <input id="subdomain" type="text"
+                    className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
+                    onChange={handleSubdomainChange} />
+                <label htmlFor="data" className="self-start mt-3 text-xs font-semibold">IP Address or Data</label>
+                <input id="data" type="text"
+                    className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
+                    onChange={handleDataChange} />
+                <div className="text-left py-2">
+                    <input type="checkbox" name="commit" id="commit" aria-label="Commit"
+                        className="mr-2 rounded-sm checked:bg-indigo-400 checked:focus:bg-indigo-400 checked:hover:bg-indigo-400"
+                        checked={autocommit}
+                        onChange={handleAutocommitChange} />
+                    <label htmlFor="commit" className="text-sm font-semibold">Commit</label>
+                </div>
+                <button type="submit" className="flex items-center justify-center h-12 px-6 mt-2 text-sm font-semibold rounded dark:bg-indigo-400 hover:bg-indigo-800">
+                    Save
+                </button>
+            </form>
+        </div>
     )
 }
