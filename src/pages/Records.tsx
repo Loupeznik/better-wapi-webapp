@@ -26,7 +26,9 @@ export const RecordsPage = () => {
             subdomain: subdomain
         }
 
-        if (activeDomain) {
+        const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`)
+
+        if (activeDomain && confirm) {
             await DomainService.deleteDomainRecord(record, activeDomain!).then(() => {
                 getRecords(activeDomain)
             })
