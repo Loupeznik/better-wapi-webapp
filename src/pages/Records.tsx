@@ -4,12 +4,15 @@ import { Button } from "../components/Button"
 import { Login } from "../components/Login"
 import { getCredentialsFromStorage } from "../helpers/SecurityHelpers"
 import { FiEdit, FiTrash2 } from "react-icons/fi"
+import { UpdateForm } from "../components/UpdateForm"
 
 export const RecordsPage = () => {
     const [isAuthenticated, setAuthenticated] = useState<boolean>(false)
     const [activeDomain, setDomain] = useState<string>()
     const [subdomains, setSubdomains] = useState<models_Record[]>()
     const [searchError, setSearchError] = useState<string>()
+    const [isUpdateScreenVisible, setUpdateScreenVisible] = useState<boolean>(false)
+    const [editedSubdomain, setEditedSubdomain] = useState<models_Record>()
 
     const domainRef = createRef<HTMLInputElement>();
 
@@ -32,7 +35,12 @@ export const RecordsPage = () => {
             await DomainService.deleteDomainRecord(record, activeDomain!).then(() => {
                 getRecords(activeDomain)
             })
-        } 
+        }
+    }
+
+    const handleEditRecord = (subdomain: models_Record) => {
+        setEditedSubdomain(subdomain)
+        setUpdateScreenVisible(true)
     }
 
     useEffect(() => {
@@ -102,7 +110,7 @@ export const RecordsPage = () => {
                                             </td>
                                             <td className="p-3">
                                                 <div className="flex flex-row text-lg justify-center">
-                                                    <FiEdit className="mx-1 hover:text-yellow-600 cursor-pointer" />
+                                                    <FiEdit className="mx-1 hover:text-yellow-600 cursor-pointer" onClick={() => handleEditRecord(subdomain)} />
                                                     <FiTrash2 className="mx-1 hover:text-red-600 cursor-pointer" onClick={() => handleDeleteRecord(subdomain.name!)} />
                                                 </div>
                                             </td>
@@ -139,6 +147,9 @@ export const RecordsPage = () => {
             </div>
             {searchError ? <label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">{searchError}</label> : ''}
             {renderList()}
+            {isUpdateScreenVisible ?
+                <UpdateForm domain={activeDomain!} record={editedSubdomain!} isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible} onUpdate={async () => await getRecords(activeDomain!)} />
+                : null}
         </div>
     )
 }

@@ -13,7 +13,7 @@ export const CreateRecordPage = () => {
     const handleDomainChange = (event: React.ChangeEvent<HTMLInputElement>) => setDomain(event.target.value)
     const handleSubdomainChange = (event: React.ChangeEvent<HTMLInputElement>) => setSubdomain(event.target.value)
     const handleDataChange = (event: React.ChangeEvent<HTMLInputElement>) => setData(event.target.value)
-    const handleAutocommitChange = (event: React.ChangeEvent<HTMLInputElement>) => setAutocommit(!autocommit)
+    const handleAutocommitChange = () => setAutocommit(!autocommit)
 
     const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault()
