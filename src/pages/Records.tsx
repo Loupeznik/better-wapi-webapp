@@ -18,9 +18,11 @@ export const RecordsPage = () => {
 
     const handleDomainChange = async () => {
         if (domainRef.current) {
-            setDomain(domainRef.current.value)
+            const domain = domainRef.current.value
+            setDomain(domain)
 
-            await getRecords(domainRef.current.value)
+            await getRecords(domain)
+            saveLatestDomain(domain)
         }
     }
 
@@ -47,6 +49,13 @@ export const RecordsPage = () => {
         setAuthenticated(getCredentialsFromStorage())
     }, [activeDomain, isAuthenticated])
 
+    useEffect(() => {
+        const latestDomain = getLatestDomain()
+        if (latestDomain) {
+            getRecords(latestDomain)
+        }
+    }, [])
+
     const getRecords = async (domain: string) => {
         try {
             const records = await DomainService.getDomainInfo(domain)
@@ -64,23 +73,40 @@ export const RecordsPage = () => {
         }
     }
 
+    const saveLatestDomain = (domain: string) => localStorage.setItem('lastDomain', domain)
+    
+    const getLatestDomain = () => {
+        const lastDomain = localStorage.getItem('lastDomain')
+
+        if (lastDomain) {
+            setDomain(lastDomain)
+        }
+
+        return lastDomain
+    }
+
     if (!isAuthenticated) {
         return <Login setAuthenticated={(value: boolean) => setAuthenticated(value)} />
     }
 
     return (
         <div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
-            <p>{!activeDomain ? 'Select domain to list records' : 'Listing records for domain ' + activeDomain}</p>
+            <p>{!activeDomain ? 
+                'Select domain to list records' : 
+                `Listing records for domain ${activeDomain}`}
+            </p>
             <div className="flex items-center justify-center space-x-4">
                 <input type="text" className="items-center p-5 w-3/4 mt-2 text-center rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                    ref={domainRef} id="search" />
+                    ref={domainRef} id="search" defaultValue={activeDomain} />
                 <span className="mt-2"><Button onClick={handleDomainChange}>Search</Button></span>
             </div>
             {searchError ? <label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">{searchError}</label> : ''}
             <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord} />
-            {isUpdateScreenVisible ?
-                <UpdateForm domain={activeDomain!} record={editedSubdomain!} isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible} onUpdate={async () => await getRecords(activeDomain!)} />
-                : null}
+            {isUpdateScreenVisible && activeDomain && editedSubdomain ?
+                <UpdateForm domain={activeDomain} record={editedSubdomain} 
+                            isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible} 
+                            onUpdate={async () => await getRecords(activeDomain)} /> :
+                null}
         </div>
     )
 }
