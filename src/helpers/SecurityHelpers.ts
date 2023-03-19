@@ -1,33 +1,56 @@
-import Cookies from "js-cookie"
-import { OpenAPI } from "../api"
+import { AuthService, models_Login, OpenAPI } from '../api';
 
-const getCredentialsFromStorage = (): boolean => {
-    if (OpenAPI.USERNAME && OpenAPI.PASSWORD) {
-        return true
+const _localAppTokenStorageKey : string = 'jwt'
+const _localAppTokenExpirationStorageKey : string = 'jwt_exp'
+
+const getToken = async (credentials?: models_Login) : Promise<boolean> => {
+    const localToken = localStorage.getItem(_localAppTokenStorageKey)
+    let token
+
+    if (localToken != null && !isTokenExpired())
+    {
+        token = localToken
+        console.log("Using local token")
+    }
+    else
+    {
+        if (credentials == null) 
+        {
+            console.log("No credentials provided")
+            return false
+        }
+
+        const tokenResult = await AuthService.postAuthToken(credentials)
+        console.log("Token result: " + tokenResult)
+
+        if (tokenResult.token != null)
+        {
+            localStorage.setItem(_localAppTokenStorageKey, tokenResult.token)
+            setTokenExpiration(12)
+
+            token = tokenResult.token
+        }
     }
 
-    const login = Cookies.get("login")
-    const password = Cookies.get("password")
-
-    if (!login || !password) {
-        return false
-    }
-
-    OpenAPI.USERNAME = login
-    OpenAPI.PASSWORD = password
-
+    OpenAPI.TOKEN = token
     return true
 }
 
-const saveCredentialsToStorage = (login: string, password: string): boolean => {
-    if (!login || !password) {
-        return false
-    }
-
-    Cookies.set("login", login, { expires: 1 })
-    Cookies.set("password", password, { expires: 1 })
-
-    return true
+const isTokenExpired = () : boolean => {
+    const localTokenExpiration = localStorage.getItem(_localAppTokenExpirationStorageKey)
+    return localTokenExpiration === null ? false : Date.now() > Date.parse(localTokenExpiration)
 }
 
-export { getCredentialsFromStorage, saveCredentialsToStorage }
+const setTokenExpiration = (expiresIn: number) => {
+    let currentDate = new Date()
+    currentDate.setHours(currentDate.getHours() + expiresIn)
+
+    localStorage.setItem(_localAppTokenExpirationStorageKey, currentDate.toUTCString())
+}
+
+const revokeToken = () => {
+    localStorage.removeItem(_localAppTokenStorageKey)
+    localStorage.removeItem(_localAppTokenExpirationStorageKey)
+}
+
+export { getToken, isTokenExpired, setTokenExpiration, revokeToken }

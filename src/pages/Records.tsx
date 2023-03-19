@@ -2,7 +2,7 @@ import { createRef, useEffect, useState } from "react"
 import { ApiError, DomainService, models_ErrorResponse, models_Record, models_SaveRowRequest } from "../api"
 import { Button } from "../components/Button"
 import { Login } from "../components/Login"
-import { getCredentialsFromStorage } from "../helpers/SecurityHelpers"
+import { getToken } from "../helpers/SecurityHelpers"
 import { UpdateForm } from "../components/UpdateForm"
 import { DomainList } from "../components/DomainList"
 
@@ -28,7 +28,8 @@ export const RecordsPage = () => {
 
     const handleDeleteRecord = async (subdomain: string) => {
         const record: models_SaveRowRequest = {
-            subdomain: subdomain
+            subdomain: subdomain,
+            data: '',
         }
 
         const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`)
@@ -46,15 +47,18 @@ export const RecordsPage = () => {
     }
 
     useEffect(() => {
-        setAuthenticated(getCredentialsFromStorage())
+        (async () => {
+            const result = await getToken();
+            setAuthenticated(result);
+          })()
     }, [activeDomain, isAuthenticated])
 
     useEffect(() => {
         const latestDomain = getLatestDomain()
-        if (latestDomain) {
+        if (latestDomain && isAuthenticated) {
             getRecords(latestDomain)
         }
-    }, [])
+    }, [isAuthenticated])
 
     const getRecords = async (domain: string) => {
         try {

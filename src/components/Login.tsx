@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { saveCredentialsToStorage } from "../helpers/SecurityHelpers"
+import { getToken } from "../helpers/SecurityHelpers"
 
 
 export const Login = ({ setAuthenticated }: {
@@ -11,12 +11,15 @@ export const Login = ({ setAuthenticated }: {
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => setLogin(event.target.value)
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
 
-    const handleSubmit = (event: React.SyntheticEvent) => {
+    const handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault()
 
         if (login && password) {
-            saveCredentialsToStorage(login, password)
-            setAuthenticated(true)
+            const result = await getToken({
+                login: login,
+                secret: password,
+            })
+            setAuthenticated(result)
         }
     }
 

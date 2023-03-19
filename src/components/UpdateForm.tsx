@@ -23,7 +23,7 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
 
         const request: models_SaveRowRequest = {
             subdomain: subdomain,
-            ip: data,
+            data: data,
             autocommit: autocommit
         }
 
