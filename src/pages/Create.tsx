@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { DomainService, models_RecordType } from "../api"
+import { ApiError, DomainService, models_ErrorResponse, models_RecordType } from "../api"
 import { Login } from "../components/Login"
 import { getToken } from "../helpers/SecurityHelpers"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { SaveRecordForm } from "../models/SaveRecordForm"
+import toast, { Toaster } from "react-hot-toast"
 
 export const CreateRecordPage = () => {
     const [isAuthenticated, setAuthenticated] = useState<boolean>(false)
@@ -13,7 +14,13 @@ export const CreateRecordPage = () => {
     const onSubmit: SubmitHandler<SaveRecordForm> = async (data) => {
         data.request.ttl = data.request.ttl == undefined ? undefined : parseInt(data.request.ttl.toString())
 
-        await DomainService.postDomainRecord(data.request, data.domain)
+        const promise = DomainService.postDomainRecord(data.request, data.domain)
+
+        toast.promise(promise, {
+            loading: 'Creating record...',
+            success: 'Record created successfully',
+            error: (error: ApiError) => `Failed to create record: ${error.body["error"]}`,
+        })
     }
 
     useEffect(() => {
@@ -29,6 +36,7 @@ export const CreateRecordPage = () => {
 
     return (
         <div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
+            <Toaster />
             <h1 className="text-center text-3xl font-bold">Create a new record</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto">
                 <label htmlFor="domain" className="self-start mt-3 text-xs font-semibold">Domain<span className="ml-1 text-red-400">*</span></label>
