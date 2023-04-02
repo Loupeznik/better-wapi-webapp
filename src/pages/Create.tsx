@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react"
-import { ApiError, DomainService, models_ErrorResponse, models_RecordType } from "../api"
+import { ApiError, DomainService, models_RecordType } from "../api"
 import { Login } from "../components/Login"
 import { getToken } from "../helpers/SecurityHelpers"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { SaveRecordForm } from "../models/SaveRecordForm"
 import toast, { Toaster } from "react-hot-toast"
+import { FormValidationErrorMessage } from "../components/FormValidationErrorMessage"
 
 export const CreateRecordPage = () => {
     const [isAuthenticated, setAuthenticated] = useState<boolean>(false)
-    
+
     const { register, handleSubmit, formState: { errors } } = useForm<SaveRecordForm>();
 
     const onSubmit: SubmitHandler<SaveRecordForm> = async (data) => {
@@ -43,22 +44,22 @@ export const CreateRecordPage = () => {
                 <input id="domain" type="text"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     {...register("domain", { required: true })} />
-                {errors.domain && <span className="text-red-400 my-1 text-xs">This field is required</span>}
+                {errors.domain && <FormValidationErrorMessage message="This field is required" />}
                 <label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">Subdomain<span className="ml-1 text-red-400">*</span></label>
                 <input id="subdomain" type="text"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     {...register("request.subdomain", { required: true })} />
-                {errors.request?.subdomain && <span className="text-red-400 my-1 text-xs">This field is required</span>}
+                {errors.request?.subdomain && <FormValidationErrorMessage message="This field is required" />}
                 <label htmlFor="data" className="self-start mt-3 text-xs font-semibold">IP Address or Data<span className="ml-1 text-red-400">*</span></label>
                 <input id="data" type="text"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     {...register("request.data", { required: true })} />
-                {errors.request?.data && <span className="text-red-400 my-1 text-xs">This field is required</span>}
+                {errors.request?.data && <FormValidationErrorMessage message="This field is required" />}
                 <label htmlFor="data" className="self-start mt-3 text-xs font-semibold">TTL</label>
                 <input id="data" type="number"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     {...register("request.ttl", { min: 300, max: 172800 })} />
-                    {errors.request?.ttl && <span className="text-red-400 my-1 text-xs">TTL must be between 300 and 172800</span>}
+                {errors.request?.ttl && <FormValidationErrorMessage message="TTL must be between 300 and 172800" />}
                 <label htmlFor="type" className="self-start mt-3 text-xs font-semibold">Record Type</label>
                 <div className="flex flex-row justify-center">
                     <select id="type" className="flex mt-2 rounded w-full

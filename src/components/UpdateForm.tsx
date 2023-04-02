@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { DomainService, models_Record, models_SaveRowRequest } from "../api";
+import { ApiError, DomainService, models_Record, models_SaveRowRequest } from "../api";
+import { useForm, SubmitHandler } from "react-hook-form"
+import toast from "react-hot-toast"
+import { FormValidationErrorMessage } from "./FormValidationErrorMessage";
 
 type UpdateFormProps = {
     record: models_Record,
@@ -9,32 +11,46 @@ type UpdateFormProps = {
     onUpdate: () => void
 }
 
+type UpdateRecordForm = {
+    subdomain: string,
+    data: string,
+    ttl: number,
+    autocommit: boolean
+}
+
 export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: UpdateFormProps) => {
-    const [subdomain, setSubdomain] = useState<string>(record.name!)
-    const [data, setData] = useState<string>()
-    const [autocommit, setAutocommit] = useState<boolean>(false)
-
-    const handleSubmit = async (event: React.SyntheticEvent) => {
-        event.preventDefault()
-
-        if (!subdomain || !data) {
-            return
+    const { register, handleSubmit, formState: { errors } } = useForm<UpdateRecordForm>({
+        defaultValues: {
+            subdomain: record.name,
+            data: record.rdata,
+            ttl: parseInt(record.ttl ? record.ttl : "0"),
+            autocommit: false
         }
+    })
+
+    const onSubmit: SubmitHandler<UpdateRecordForm> = async (data) => {
+        data.ttl = parseInt(data.ttl.toString())
 
         const request: models_SaveRowRequest = {
-            subdomain: subdomain,
-            data: data,
-            autocommit: autocommit
+            subdomain: data.subdomain,
+            data: data.data,
+            autocommit: data.autocommit,
+            ttl: data.ttl
         }
 
-        await DomainService.putDomainRecord(request, domain)
-        setVisible(false)
-        onUpdate()
-    }
+        const promise = DomainService.putDomainRecord(request, domain)
 
-    const handleSubdomainChange = (event: React.ChangeEvent<HTMLInputElement>) => setSubdomain(event.target.value)
-    const handleDataChange = (event: React.ChangeEvent<HTMLInputElement>) => setData(event.target.value)
-    const handleAutocommitChange = () => setAutocommit(!autocommit)
+        const result = toast.promise(promise, {
+            loading: 'Updating record...',
+            success: 'Record updated successfully',
+            error: (error: ApiError) => `Failed to update record: ${error.body["error"]}`,
+        })
+
+        await result.then(() => {
+            setVisible(false)
+            onUpdate()
+        })
+    }
 
     return (
         isVisible ?
@@ -43,22 +59,31 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
                     <div className="inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
                         <div className="bg-slate-900 px-6 py-6">
                             <h1 className="text-center text-3xl font-bold">Update record</h1>
-                            <form onSubmit={handleSubmit} className="mt-6">
+                            <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
                                 <div>
                                     <label htmlFor="subdomain" className="block text-sm font-medium">Subdomain</label>
                                     <input id="subdomain" type="text"
                                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 text-slate-900 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                        value={subdomain ?? record.name} onChange={handleSubdomainChange} disabled />
+                                        {...register("subdomain")} disabled />
                                 </div>
                                 <div className="mt-6">
                                     <label htmlFor="data" className="block text-sm font-medium">IP Address or Data</label>
                                     <input id="data" type="text"
                                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md text-slate-900"
-                                        value={data ?? record.rdata} onChange={handleDataChange} />
+                                        {...register("data", { required: true })} />
+                                </div>
+                                {errors.data && <FormValidationErrorMessage message="This field is required" />}
+                                <div className="mt-6">
+                                    <label htmlFor="ttl" className="block text-sm font-medium">TTL</label>
+                                    <input id="ttl" type="number"
+                                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md text-slate-900"
+                                        {...register("ttl", { min: 300, max: 172800 })} />
                                 </div>
                                 <div className="mt-6">
                                     <label htmlFor="commit" className="inline-flex items-center">
-                                        <input type="checkbox" name="commit" id="commit" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" checked={autocommit} onChange={handleAutocommitChange} />
+                                        <input type="checkbox" id="commit"
+                                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                            {...register("autocommit")} />
                                         <span className="ml-2 text-sm">Commit</span>
                                     </label>
                                 </div>

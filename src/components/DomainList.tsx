@@ -42,7 +42,7 @@ export const DomainList = ({subdomains, handleEditRecord, handleDeleteRecord} : 
                                         <td className="p-3">
                                             <p>{subdomain.rdtype}</p>
                                         </td>
-                                        <td className="p-3">
+                                        <td className="p-3 max-w-sm truncate">
                                             <p>{subdomain.rdata}</p>
                                         </td>
                                         <td className="p-3">

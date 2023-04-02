@@ -5,6 +5,7 @@ import { Login } from "../components/Login"
 import { getToken } from "../helpers/SecurityHelpers"
 import { UpdateForm } from "../components/UpdateForm"
 import { DomainList } from "../components/DomainList"
+import { Toaster, toast } from "react-hot-toast"
 
 export const RecordsPage = () => {
     const [isAuthenticated, setAuthenticated] = useState<boolean>(false)
@@ -35,8 +36,12 @@ export const RecordsPage = () => {
         const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`)
 
         if (activeDomain && confirm) {
-            await DomainService.deleteDomainRecord(record, activeDomain!).then(() => {
+            await DomainService.deleteDomainRecord(record, activeDomain!).then(onFulfilled => {
+                toast.success(`Record for ${subdomain} deleted successfully`)
                 getRecords(activeDomain)
+            }, onRejected => {
+                const exception = onRejected as ApiError
+                toast.error(`Failed to delete record for ${subdomain}: ${(exception.body as models_ErrorResponse).error}`)
             })
         }
     }
@@ -50,7 +55,7 @@ export const RecordsPage = () => {
         (async () => {
             const result = await getToken();
             setAuthenticated(result);
-          })()
+        })()
     }, [activeDomain, isAuthenticated])
 
     useEffect(() => {
@@ -78,7 +83,7 @@ export const RecordsPage = () => {
     }
 
     const saveLatestDomain = (domain: string) => localStorage.setItem('lastDomain', domain)
-    
+
     const getLatestDomain = () => {
         const lastDomain = localStorage.getItem('lastDomain')
 
@@ -95,8 +100,9 @@ export const RecordsPage = () => {
 
     return (
         <div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
-            <p>{!activeDomain ? 
-                'Select domain to list records' : 
+            <Toaster />
+            <p>{!activeDomain ?
+                'Select domain to list records' :
                 `Listing records for domain ${activeDomain}`}
             </p>
             <div className="flex items-center justify-center space-x-4">
@@ -107,9 +113,9 @@ export const RecordsPage = () => {
             {searchError ? <label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">{searchError}</label> : ''}
             <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord} />
             {isUpdateScreenVisible && activeDomain && editedSubdomain ?
-                <UpdateForm domain={activeDomain} record={editedSubdomain} 
-                            isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible} 
-                            onUpdate={async () => await getRecords(activeDomain)} /> :
+                <UpdateForm domain={activeDomain} record={editedSubdomain}
+                    isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible}
+                    onUpdate={async () => await getRecords(activeDomain)} /> :
                 null}
         </div>
     )
