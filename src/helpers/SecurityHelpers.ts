@@ -10,13 +10,11 @@ const getToken = async (credentials?: models_Login) : Promise<boolean> => {
     if (localToken != null && !isTokenExpired())
     {
         token = localToken
-        console.log("Using local token")
     }
     else
     {
         if (credentials == null) 
         {
-            console.log("No credentials provided")
             return false
         }
 
