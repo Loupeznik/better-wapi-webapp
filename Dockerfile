@@ -14,5 +14,7 @@ FROM nginx:alpine AS final
 
 WORKDIR /usr/share/nginx/html
 
+VOLUME /usr/share/nginx/html
+
 COPY --from=build /app/dist .
 COPY --from=build /app/conf/nginx.conf /etc/nginx/conf.d/default.conf
