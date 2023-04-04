@@ -3,8 +3,14 @@ import { Navbar } from './components/Navbar'
 import { CreateRecordPage } from './pages/Create'
 import { HomePage } from './pages/Home'
 import { RecordsPage } from './pages/Records'
+import loadConfig from './helpers/ConfigHelpers';
+import { OpenAPI } from './api'
 
 function App() {
+  loadConfig().then((config) => {
+    OpenAPI.BASE = config.API_BASE_URL
+  })
+
   return (
     <div className="bg-stone-800">
       <Navbar />
