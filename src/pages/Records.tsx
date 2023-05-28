@@ -14,6 +14,7 @@ export const RecordsPage = () => {
     const [searchError, setSearchError] = useState<string>()
     const [isUpdateScreenVisible, setUpdateScreenVisible] = useState<boolean>(false)
     const [editedSubdomain, setEditedSubdomain] = useState<models_Record>()
+    const [isDomainExpanded, setIsDomainExpanded] = useState<boolean>(false)
 
     const domainRef = createRef<HTMLInputElement>();
 
@@ -111,7 +112,8 @@ export const RecordsPage = () => {
                 <span className="mt-2"><Button onClick={handleDomainChange}>Search</Button></span>
             </div>
             {searchError ? <label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">{searchError}</label> : ''}
-            <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord} />
+            <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord} 
+                isDomainExpanded={isDomainExpanded} setIsDomainExpanded={setIsDomainExpanded} domain={activeDomain} />
             {isUpdateScreenVisible && activeDomain && editedSubdomain ?
                 <UpdateForm domain={activeDomain} record={editedSubdomain}
                     isVisible={isUpdateScreenVisible} setVisible={setUpdateScreenVisible}
