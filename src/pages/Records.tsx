@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState } from "react"
-import { ApiError, DomainService, models_ErrorResponse, models_Record, models_SaveRowRequest } from "../api"
+import { ApiError, DomainService, models_DeleteRowRequest, models_ErrorResponse, models_Record, models_SaveRowRequest } from "../api"
 import { Button } from "../components/Button"
 import { Login } from "../components/Login"
 import { getToken } from "../helpers/SecurityHelpers"
@@ -29,9 +29,9 @@ export const RecordsPage = () => {
     }
 
     const handleDeleteRecord = async (subdomain: string) => {
-        const record: models_SaveRowRequest = {
+        const record: models_DeleteRowRequest = {
             subdomain: subdomain,
-            data: '',
+            autocommit: false
         }
 
         const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`)

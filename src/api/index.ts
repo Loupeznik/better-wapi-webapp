@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { models_DeleteRowRequest } from './models/models_DeleteRowRequest';
 export type { models_ErrorResponse } from './models/models_ErrorResponse';
 export type { models_Login } from './models/models_Login';
 export type { models_Record } from './models/models_Record';

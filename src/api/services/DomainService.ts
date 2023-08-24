@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { models_DeleteRowRequest } from '../models/models_DeleteRowRequest';
 import type { models_Record } from '../models/models_Record';
 import type { models_SaveRowRequest } from '../models/models_SaveRowRequest';
 
@@ -37,7 +38,7 @@ domain: string,
     }
 
     /**
-     * Update an existing A record
+     * Update an existing record
      * @param request Request body
      * @param domain Domain
      * @returns any OK
@@ -66,7 +67,7 @@ domain: string,
     }
 
     /**
-     * Create a new A record
+     * Create a new record
      * @param request Request body
      * @param domain Domain
      * @returns any OK
@@ -95,14 +96,14 @@ domain: string,
     }
 
     /**
-     * Delete an existing A record
+     * Delete an existing record
      * @param request Request body
      * @param domain Domain
      * @returns any OK
      * @throws ApiError
      */
     public static deleteDomainRecord(
-request: models_SaveRowRequest,
+request: models_DeleteRowRequest,
 domain: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
