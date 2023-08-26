@@ -19,7 +19,6 @@ const getToken = async (credentials?: models_Login) : Promise<boolean> => {
         }
 
         const tokenResult = await AuthService.postAuthToken(credentials)
-        console.log("Token result: " + tokenResult)
 
         if (tokenResult.token != null)
         {
