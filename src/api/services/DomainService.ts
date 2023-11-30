@@ -41,13 +41,13 @@ domain: string,
      * Update an existing record
      * @param request Request body
      * @param domain Domain
-     * @returns any OK
+     * @returns void 
      * @throws ApiError
      */
     public static putDomainRecord(
 request: models_SaveRowRequest,
 domain: string,
-): CancelablePromise<any> {
+): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/domain/{domain}/record',
@@ -70,7 +70,7 @@ domain: string,
      * Create a new record
      * @param request Request body
      * @param domain Domain
-     * @returns any OK
+     * @returns any Created
      * @throws ApiError
      */
     public static postDomainRecord(
