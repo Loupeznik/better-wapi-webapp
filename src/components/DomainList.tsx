@@ -4,7 +4,7 @@ import { models_Record } from "../api"
 type DomainListProps = {
     subdomains: models_Record[] | undefined
     handleEditRecord: (subdomain: models_Record) => void
-    handleDeleteRecord: (subdomain: string) => void
+    handleDeleteRecord: (subdomain: string, id: number) => void
     isDomainExpanded: boolean
     setIsDomainExpanded: (isDomainExpanded: boolean) => void
     domain: string | undefined
@@ -12,7 +12,7 @@ type DomainListProps = {
 
 export const DomainList = (props: DomainListProps) => {
     const allowedRecordTypes = ['A', 'AAAA', 'CNAME']
-    const canShowDomain = (type: string | undefined) : boolean => 
+    const canShowDomain = (type: string | undefined): boolean =>
         props.isDomainExpanded && props.domain !== undefined && allowedRecordTypes.some(x => x == type)
 
     return (
@@ -27,8 +27,8 @@ export const DomainList = (props: DomainListProps) => {
                                 <th className="p-3">
                                     <div className="flex flex-row justify-center place-items-center">
                                         Name
-                                        {   !props.isDomainExpanded ?
-                                            <FiMaximize2 className="ml-2 cursor-pointer hover:text-yellow-200" 
+                                        {!props.isDomainExpanded ?
+                                            <FiMaximize2 className="ml-2 cursor-pointer hover:text-yellow-200"
                                                 onClick={() => props.setIsDomainExpanded(true)} title="Show domain name" /> :
                                             <FiMinimize2 className="ml-2 cursor-pointer hover:text-red-200"
                                                 onClick={() => props.setIsDomainExpanded(false)} title="Hide domain name" />
@@ -70,10 +70,10 @@ export const DomainList = (props: DomainListProps) => {
                                         </td>
                                         <td className="p-3">
                                             <div className="flex flex-row text-lg justify-center">
-                                                <FiEdit className="mx-1 hover:text-yellow-600 cursor-pointer" 
+                                                <FiEdit className="mx-1 hover:text-yellow-600 cursor-pointer"
                                                     onClick={() => props.handleEditRecord(subdomain)} />
-                                                <FiTrash2 className="mx-1 hover:text-red-600 cursor-pointer" 
-                                                    onClick={() => props.handleDeleteRecord(subdomain.name!)} />
+                                                <FiTrash2 className="mx-1 hover:text-red-600 cursor-pointer"
+                                                    onClick={() => props.handleDeleteRecord(subdomain.name!, Number(subdomain.ID))} />
                                             </div>
                                         </td>
                                     </tr>

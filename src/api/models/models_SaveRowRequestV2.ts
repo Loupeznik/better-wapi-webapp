@@ -4,10 +4,9 @@
 
 import type { models_RecordType } from './models_RecordType';
 
-export type models_SaveRowRequest = {
+export type models_SaveRowRequestV2 = {
     autocommit?: boolean;
     data: string;
-    subdomain?: string;
     ttl?: number;
     type?: models_RecordType;
 };

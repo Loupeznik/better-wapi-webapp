@@ -15,7 +15,7 @@ export const CreateRecordPage = () => {
     const onSubmit: SubmitHandler<SaveRecordForm> = async (data) => {
         data.request.ttl = data.request.ttl == undefined ? undefined : parseInt(data.request.ttl.toString())
 
-        const promise = DomainService.postDomainRecord(data.request, data.domain)
+        const promise = DomainService.postV1DomainRecord(data.request, data.domain)
 
         toast.promise(promise, {
             loading: 'Creating record...',
@@ -45,11 +45,10 @@ export const CreateRecordPage = () => {
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
                     {...register("domain", { required: true })} />
                 {errors.domain && <FormValidationErrorMessage message="This field is required" />}
-                <label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">Subdomain<span className="ml-1 text-red-400">*</span></label>
+                <label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">Subdomain</label>
                 <input id="subdomain" type="text"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-                    {...register("request.subdomain", { required: true })} />
-                {errors.request?.subdomain && <FormValidationErrorMessage message="This field is required" />}
+                    {...register("request.subdomain")} />
                 <label htmlFor="data" className="self-start mt-3 text-xs font-semibold">IP Address or Data<span className="ml-1 text-red-400">*</span></label>
                 <input id="data" type="text"
                     className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"

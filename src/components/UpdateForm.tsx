@@ -32,13 +32,13 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
         data.ttl = parseInt(data.ttl.toString())
 
         const request: models_SaveRowRequest = {
-            subdomain: data.subdomain,
+            subdomain: data.subdomain || "",
             data: data.data,
             autocommit: data.autocommit,
             ttl: data.ttl
         }
 
-        const promise = DomainService.putDomainRecord(request, domain)
+        const promise = DomainService.putV2DomainRecord(request, domain, Number(record.ID))
 
         const result = toast.promise(promise, {
             loading: 'Updating record...',
@@ -55,7 +55,7 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
     return (
         isVisible ?
             <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
-                <div className="flex items-end justify-center  px-4 text-center sm:block sm:p-0 align-bottom rounded-lg text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div className="flex items-end justify-center  px-4 text-center sm:block sm:p-0 align-bottom rounded-lg overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div className="inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg sm:w-full">
                         <div className="bg-slate-900 px-6 py-6">
                             <h1 className="text-center text-3xl font-bold">Update record</h1>
@@ -70,9 +70,8 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
                                     <label htmlFor="data" className="block text-sm font-medium">IP Address or Data</label>
                                     <input id="data" type="text"
                                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md text-slate-900"
-                                        {...register("data", { required: true })} />
+                                        {...register("data")} />
                                 </div>
-                                {errors.data && <FormValidationErrorMessage message="This field is required" />}
                                 <div className="mt-6">
                                     <label htmlFor="ttl" className="block text-sm font-medium">TTL</label>
                                     <input id="ttl" type="number"

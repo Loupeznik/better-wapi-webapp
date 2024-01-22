@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState } from "react"
-import { ApiError, DomainService, models_DeleteRowRequest, models_ErrorResponse, models_Record, models_SaveRowRequest } from "../api"
+import { ApiError, DomainService, models_DeleteRowRequest, models_DeleteRowRequestV2, models_ErrorResponse, models_Record, models_SaveRowRequest } from "../api"
 import { Button } from "../components/Button"
 import { Login } from "../components/Login"
 import { getToken } from "../helpers/SecurityHelpers"
@@ -28,16 +28,15 @@ export const RecordsPage = () => {
         }
     }
 
-    const handleDeleteRecord = async (subdomain: string) => {
-        const record: models_DeleteRowRequest = {
-            subdomain: subdomain,
+    const handleDeleteRecord = async (subdomain: string, id: number) => {
+        const request: models_DeleteRowRequestV2 = {
             autocommit: false
         }
 
         const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`)
 
         if (activeDomain && confirm) {
-            await DomainService.deleteDomainRecord(record, activeDomain!).then(onFulfilled => {
+            await DomainService.deleteV2DomainRecord(request, activeDomain!, id).then(onFulfilled => {
                 toast.success(`Record for ${subdomain} deleted successfully`)
                 getRecords(activeDomain)
             }, onRejected => {
@@ -68,7 +67,7 @@ export const RecordsPage = () => {
 
     const getRecords = async (domain: string) => {
         try {
-            const records = await DomainService.getDomainInfo(domain)
+            const records = await DomainService.getV1DomainInfo(domain)
 
             if (searchError) {
                 setSearchError('')
@@ -112,7 +111,7 @@ export const RecordsPage = () => {
                 <span className="mt-2"><Button onClick={handleDomainChange}>Search</Button></span>
             </div>
             {searchError ? <label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">{searchError}</label> : ''}
-            <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord} 
+            <DomainList subdomains={subdomains} handleEditRecord={handleEditRecord} handleDeleteRecord={handleDeleteRecord}
                 isDomainExpanded={isDomainExpanded} setIsDomainExpanded={setIsDomainExpanded} domain={activeDomain} />
             {isUpdateScreenVisible && activeDomain && editedSubdomain ?
                 <UpdateForm domain={activeDomain} record={editedSubdomain}
