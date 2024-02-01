@@ -1,13 +1,13 @@
-import { ApiError, DomainService, models_Record, models_SaveRowRequest } from '../api';
+import { models_Record, models_SaveRowRequest } from '../api';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { updateRecord } from '../redux/thunks/records/updateRecord';
 
 type UpdateFormProps = {
 	record: models_Record;
 	domain: string;
 	isVisible: boolean;
 	setVisible: (value: boolean) => void;
-	onUpdate: () => void;
 };
 
 type UpdateRecordForm = {
@@ -17,7 +17,7 @@ type UpdateRecordForm = {
 	autocommit: boolean;
 };
 
-export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: UpdateFormProps) => {
+export const UpdateForm = ({ record, domain, isVisible, setVisible }: UpdateFormProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -31,6 +31,8 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
 		},
 	});
 
+	const dispatch = useDispatch();
+
 	const onSubmit: SubmitHandler<UpdateRecordForm> = async data => {
 		data.ttl = parseInt(data.ttl.toString());
 
@@ -41,18 +43,8 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible, onUpdate }: 
 			ttl: data.ttl,
 		};
 
-		const promise = DomainService.putV2DomainRecord(request, domain, Number(record.ID));
-
-		const result = toast.promise(promise, {
-			loading: 'Updating record...',
-			success: 'Record updated successfully',
-			error: (error: ApiError) => `Failed to update record: ${error.body['error']}`,
-		});
-
-		await result.then(() => {
-			setVisible(false);
-			onUpdate();
-		});
+		dispatch(updateRecord({ domain, subdomain: request, id: Number(record.ID) }) as any);
+		setVisible(false);
 	};
 
 	return isVisible ? (
