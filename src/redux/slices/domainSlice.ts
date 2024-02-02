@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { models_Record, models_SaveRowRequest } from '../../api';
+import { models_Record } from '../../api';
 import { fetchRecords } from '../thunks/records/fetchRecords';
 import { addRecord } from '../thunks/records/addRecord';
 import { updateRecord } from '../thunks/records/updateRecord';

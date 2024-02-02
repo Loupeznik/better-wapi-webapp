@@ -67,13 +67,6 @@ export const RecordsPage = () => {
 					<Button onClick={handleDomainChange}>Search</Button>
 				</span>
 			</div>
-			{domain.error ? (
-				<label htmlFor="search" className="block text-sm font-semibold text-center text-red-600">
-					{domain.error}
-				</label>
-			) : (
-				''
-			)}
 
 			<DomainList
 				subdomains={domain.subdomains}
