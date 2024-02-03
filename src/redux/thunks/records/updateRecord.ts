@@ -7,10 +7,16 @@ const typePrefix = 'domain/updateRecord';
 export const updateRecord = createAsyncThunk(
 	typePrefix,
 	async (params: { domain: string; subdomain: models_SaveRowRequestV2; id: number }) => {
-		console.log(params);
-		await DomainService.putV2DomainRecord(params.subdomain, params.domain, params.id).then(
-			_ => toast.success('Record updated successfully!'),
-			(error: ApiError) => toast.error(`Failed to update record: ${error.body['error']}`) && Promise.reject(),
+		await toast.promise(
+			DomainService.putV2DomainRecord(params.subdomain, params.domain, params.id).then(
+				_ => Promise.resolve(),
+				(error: ApiError) => Promise.reject(`Failed to update record: ${error.body['error']}`),
+			),
+			{
+				loading: 'Updating record...',
+				success: 'Record updated successfully!',
+				error: (error: string) => error,
+			},
 		);
 	},
 );

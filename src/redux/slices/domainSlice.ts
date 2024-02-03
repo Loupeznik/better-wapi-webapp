@@ -57,11 +57,9 @@ export const domainSlice = createSlice({
 				state.shouldFetchRecords = true;
 			})
 			.addCase(updateRecord.pending, state => {
-				console.log('pending');
 				state.isLoading = true;
 			})
 			.addCase(updateRecord.rejected, state => {
-				console.log('rejected');
 				state.isLoading = false;
 				state.error = 'Failed to update subdomain';
 			})
