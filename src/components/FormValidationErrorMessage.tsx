@@ -1,11 +1,7 @@
 type FormValidationErrorMessageProps = {
-    message: string
-}
+	message: string;
+};
 
 export const FormValidationErrorMessage = (props: FormValidationErrorMessageProps) => {
-    return (
-        <div className="text-red-400 my-1 text-xs">
-            {props.message}
-        </div>
-    )
-}
+	return <div className="text-red-400 my-1 text-xs">{props.message}</div>;
+};
