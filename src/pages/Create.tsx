@@ -1,10 +1,11 @@
-import { models_RecordType } from '../api';
-import { Login } from '../components/Login';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { SaveRecordForm } from '../models/SaveRecordForm';
-import { FormValidationErrorMessage } from '../components/FormValidationErrorMessage';
+import type { UnknownAction } from '@reduxjs/toolkit';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
+import { models_RecordType } from '../api';
+import type { RootState } from '../app/store';
+import { FormValidationErrorMessage } from '../components/FormValidationErrorMessage';
+import { Login } from '../components/Login';
+import type { SaveRecordForm } from '../models/SaveRecordForm';
 import { addRecord } from '../redux/thunks/records/addRecord';
 
 export const CreateRecordPage = () => {
@@ -19,13 +20,13 @@ export const CreateRecordPage = () => {
 	} = useForm<SaveRecordForm>();
 
 	const onSubmit: SubmitHandler<SaveRecordForm> = async data => {
-		data.request.ttl = data.request.ttl == undefined ? undefined : parseInt(data.request.ttl.toString());
+		data.request.ttl = data.request.ttl === undefined ? undefined : Number.parseInt(data.request.ttl.toString());
 
-		dispatch(addRecord({ domain: data.domain, subdomain: data.request }) as any);
+		dispatch(addRecord({ domain: data.domain, subdomain: data.request }) as unknown as UnknownAction);
 	};
 
 	return isUserLoggedIn ? (
-		<div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
+		<div className="mx-auto p-6 mt-5 rounded-lg w-2/3">
 			<h1 className="text-center text-3xl font-bold">Create a new record</h1>
 			<form
 				onSubmit={handleSubmit(onSubmit)}

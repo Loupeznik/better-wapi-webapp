@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactElement } from 'react';
+import type { MouseEventHandler, ReactElement } from 'react';
 
 type ButtonProps = {
 	children: ReactElement | string | number | boolean | null | undefined;

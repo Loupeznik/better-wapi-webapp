@@ -1,14 +1,15 @@
+import type { UnknownAction } from '@reduxjs/toolkit';
 import { createRef, useEffect, useState } from 'react';
-import { models_DeleteRowRequestV2, models_Record } from '../api';
+import { useDispatch, useSelector } from 'react-redux';
+import type { models_DeleteRowRequestV2, models_Record } from '../api';
+import type { RootState } from '../app/store';
 import { Button } from '../components/Button';
+import { DomainList } from '../components/DomainList';
 import { Login } from '../components/Login';
 import { UpdateForm } from '../components/UpdateForm';
-import { DomainList } from '../components/DomainList';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../app/store';
-import { fetchRecords } from '../redux/thunks/records/fetchRecords';
-import { deleteRecord } from '../redux/thunks/records/deleteRecord';
 import { domainSlice } from '../redux/slices/domainSlice';
+import { deleteRecord } from '../redux/thunks/records/deleteRecord';
+import { fetchRecords } from '../redux/thunks/records/fetchRecords';
 
 export const RecordsPage = () => {
 	const domain = useSelector((state: RootState) => state.domain);
@@ -17,16 +18,15 @@ export const RecordsPage = () => {
 
 	const [isUpdateScreenVisible, setUpdateScreenVisible] = useState<boolean>(false);
 	const [editedSubdomain, setEditedSubdomain] = useState<models_Record>();
-	const [isDomainExpanded, setIsDomainExpanded] = useState<boolean>(false);
 
 	const domainRef = createRef<HTMLInputElement>();
 	const activeDomain = domain.domain;
 
 	useEffect(() => {
 		if (domain.shouldFetchRecords) {
-			dispatch(fetchRecords(domain.domain) as any);
+			dispatch(fetchRecords(domain.domain) as unknown as UnknownAction);
 		}
-	}, [domain.shouldFetchRecords]);
+	}, [domain.shouldFetchRecords, dispatch, domain.domain]);
 
 	const handleDomainChange = async () => {
 		if (domainRef.current) {
@@ -43,7 +43,7 @@ export const RecordsPage = () => {
 		const confirm = window.confirm(`Are you sure you want to delete DNS record for ${subdomain}?`);
 
 		if (confirm) {
-			dispatch(deleteRecord({ domain: domain.domain, request: request, id: id }) as any);
+			dispatch(deleteRecord({ domain: domain.domain, request: request, id: id }) as unknown as UnknownAction);
 		}
 	};
 
@@ -53,7 +53,7 @@ export const RecordsPage = () => {
 	};
 
 	return isUserLoggedIn ? (
-		<div className="text-center bg-slate-900/25 rounded-lg w-3/4 text-white mx-auto items-center justify-center my-6 p-4">
+		<div className="text-center rounded-lg w-3/4 mx-auto items-center justify-center my-6 p-4">
 			<p>{!activeDomain ? 'Select domain to list records' : `Listing records for domain ${activeDomain}`}</p>
 			<div className="flex items-center justify-center space-x-4">
 				<input
@@ -72,8 +72,6 @@ export const RecordsPage = () => {
 				subdomains={domain.subdomains}
 				handleEditRecord={handleEditRecord}
 				handleDeleteRecord={handleDeleteRecord}
-				isDomainExpanded={isDomainExpanded}
-				setIsDomainExpanded={setIsDomainExpanded}
 				domain={activeDomain}
 				isLoading={domain.isLoading}
 			/>

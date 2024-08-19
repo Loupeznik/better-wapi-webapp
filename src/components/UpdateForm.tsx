@@ -1,6 +1,7 @@
-import { models_Record, models_SaveRowRequest } from '../api';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import type { UnknownAction } from '@reduxjs/toolkit';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import type { models_Record, models_SaveRowRequest } from '../api';
 import { updateRecord } from '../redux/thunks/records/updateRecord';
 
 type UpdateFormProps = {
@@ -26,7 +27,7 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible }: UpdateForm
 		defaultValues: {
 			subdomain: record.name,
 			data: record.rdata,
-			ttl: parseInt(record.ttl ? record.ttl : '0'),
+			ttl: Number.parseInt(record.ttl ? record.ttl : '0'),
 			autocommit: false,
 		},
 	});
@@ -34,7 +35,7 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible }: UpdateForm
 	const dispatch = useDispatch();
 
 	const onSubmit: SubmitHandler<UpdateRecordForm> = async data => {
-		data.ttl = parseInt(data.ttl.toString());
+		data.ttl = Number.parseInt(data.ttl.toString());
 
 		const request: models_SaveRowRequest = {
 			subdomain: data.subdomain || '',
@@ -43,7 +44,7 @@ export const UpdateForm = ({ record, domain, isVisible, setVisible }: UpdateForm
 			ttl: data.ttl,
 		};
 
-		dispatch(updateRecord({ domain, subdomain: request, id: Number(record.ID) }) as any);
+		dispatch(updateRecord({ domain, subdomain: request, id: Number(record.ID) }) as unknown as UnknownAction);
 		setVisible(false);
 	};
 

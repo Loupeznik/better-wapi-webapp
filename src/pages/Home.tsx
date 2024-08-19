@@ -3,7 +3,7 @@ import { Button } from '../components/Button';
 
 export const HomePage = () => {
 	return (
-		<div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
+		<div className="mx-auto p-6 mt-5 rounded-lg w-2/3">
 			<h1 className="text-center text-3xl font-bold">Better WAPI</h1>
 			<p className="mt-2">
 				Better WAPI is a wrapper around the Wedos API (WAPI). Continue by create a new DNS record or listing
