@@ -159,7 +159,7 @@ export const DomainList = (props: DomainListProps) => {
 					setIsDomainExpanded={setIsDomainExpanded}
 					filterableColumns={filterableColumns}
 				/>
-				<table className="min-w-full text-xs">
+				<table className="min-w-full text-xs mt-4">
 					<thead className="dark:bg-gray-700">
 						{table.getHeaderGroups().map(headerGroup => (
 							<tr key={headerGroup.id}>
@@ -194,22 +194,32 @@ export const DomainList = (props: DomainListProps) => {
 						))}
 					</thead>
 					<tbody>
-						{table.getRowModel().rows.map(row => {
-							return (
-								<tr
-									key={row.id}
-									className="border-b border-opacity-20 dark:border-gray-700 dark:bg-gray-900"
-								>
-									{row.getVisibleCells().map(cell => {
-										return (
-											<td key={cell.id} className="p-3">
-												{flexRender(cell.column.columnDef.cell, cell.getContext())}
-											</td>
-										);
-									})}
-								</tr>
-							);
-						})}
+						{table.getRowCount() > 0 ? (
+							table.getRowModel().rows.map(row => {
+								return (
+									<tr
+										key={row.id}
+										className="border-b border-opacity-20 dark:border-gray-700 dark:bg-gray-900"
+									>
+										{row.getVisibleCells().map(cell => {
+											return (
+												<td key={cell.id} className="p-3">
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												</td>
+											);
+										})}
+									</tr>
+								);
+							})
+						) : (
+							<tr className="border-b border-opacity-20 dark:border-gray-700 dark:bg-gray-900">
+								{Array.from(table.getAllColumns()).map((_, index) => (
+									<td key={index} className="p-3">
+										<p>-</p>
+									</td>
+								))}
+							</tr>
+						)}
 					</tbody>
 				</table>
 
@@ -233,7 +243,9 @@ export const DomainList = (props: DomainListProps) => {
 					<span className="flex items-center gap-1">
 						<div>Page</div>
 						<strong>
-							{table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+							{`${
+								table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0
+							} of ${table.getPageCount()}`}
 						</strong>
 					</span>
 				</div>
