@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { models_Login } from '../../../api';
+import type { models_Login } from '../../../api';
 import { getToken } from '../../../helpers/SecurityHelpers';
 
 const typePrefix = 'user/loginUser';

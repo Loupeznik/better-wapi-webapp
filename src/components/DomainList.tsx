@@ -310,7 +310,12 @@ const FilterDropdown = ({
 	filterableColumns: ColumnDef<RecordWithActions, any>[];
 }) => {
 	return (
-		<Select label="Select column for filtering" className="max-w-xs" onChange={e => setFilteringBy(e.target.value)}>
+		<Select
+			label="Select column for filtering"
+			className="max-w-xs"
+			size="sm"
+			onChange={e => setFilteringBy(e.target.value)}
+		>
 			{filterableColumns.map(x => (
 				<SelectItem key={x.id as string}>{x.header as string}</SelectItem>
 			))}

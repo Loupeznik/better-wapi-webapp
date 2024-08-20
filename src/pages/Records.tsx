@@ -28,6 +28,18 @@ export const RecordsPage = () => {
 		}
 	}, [domain.shouldFetchRecords, dispatch, domain.domain]);
 
+	useEffect(() => {
+		if (
+			activeDomain &&
+			isUserLoggedIn &&
+			domain.subdomains.length === 0 &&
+			domain.error === undefined &&
+			!domain.shouldFetchRecords
+		) {
+			dispatch(fetchRecords(activeDomain) as unknown as UnknownAction);
+		}
+	}, [activeDomain, dispatch, domain.subdomains.length, domain.error, isUserLoggedIn, domain.shouldFetchRecords]);
+
 	const handleDomainChange = async () => {
 		if (domainRef.current) {
 			const domain = domainRef.current.value;
