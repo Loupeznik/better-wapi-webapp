@@ -1,3 +1,4 @@
+import type { UnknownAction } from '@reduxjs/toolkit';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../redux/thunks/users/loginUser';
@@ -15,7 +16,7 @@ export const Login = () => {
 		event.preventDefault();
 
 		if (login && password) {
-			dispatch(loginUser({ credentials: { login, secret: password } }) as any);
+			dispatch(loginUser({ credentials: { login, secret: password } }) as unknown as UnknownAction);
 		}
 	};
 

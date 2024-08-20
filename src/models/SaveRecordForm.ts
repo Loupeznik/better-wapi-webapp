@@ -1,4 +1,4 @@
-import { models_SaveRowRequest } from '../api/models/models_SaveRowRequest';
+import type { models_SaveRowRequest } from '../api/models/models_SaveRowRequest';
 
 export type SaveRecordForm = {
 	domain: string;

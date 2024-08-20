@@ -1,10 +1,11 @@
-import { models_RecordType } from '../api';
-import { Login } from '../components/Login';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { SaveRecordForm } from '../models/SaveRecordForm';
-import { FormValidationErrorMessage } from '../components/FormValidationErrorMessage';
+import { Button, Checkbox, Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import type { UnknownAction } from '@reduxjs/toolkit';
+import { type SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
+import { models_RecordType } from '../api';
+import type { RootState } from '../app/store';
+import { Login } from '../components/Login';
+import type { SaveRecordForm } from '../models/SaveRecordForm';
 import { addRecord } from '../redux/thunks/records/addRecord';
 
 export const CreateRecordPage = () => {
@@ -19,101 +20,68 @@ export const CreateRecordPage = () => {
 	} = useForm<SaveRecordForm>();
 
 	const onSubmit: SubmitHandler<SaveRecordForm> = async data => {
-		data.request.ttl = data.request.ttl == undefined ? undefined : parseInt(data.request.ttl.toString());
+		data.request.ttl = data.request.ttl === undefined ? undefined : Number.parseInt(data.request.ttl.toString());
 
-		dispatch(addRecord({ domain: data.domain, subdomain: data.request }) as any);
+		dispatch(addRecord({ domain: data.domain, subdomain: data.request }) as unknown as UnknownAction);
 	};
 
 	return isUserLoggedIn ? (
-		<div className="mx-auto p-6 mt-5 bg-slate-900/25 rounded-lg w-2/3 text-white">
+		<div className="mx-auto p-6 mt-5 rounded-lg w-2/3">
 			<h1 className="text-center text-3xl font-bold">Create a new record</h1>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto"
+				className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto gap-4"
 			>
-				<label htmlFor="domain" className="self-start mt-3 text-xs font-semibold">
-					Domain<span className="ml-1 text-red-400">*</span>
-				</label>
-				<input
-					id="domain"
+				<Input
 					type="text"
+					label="Domain"
 					defaultValue={currentDomain}
-					className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
 					{...register('domain', { required: true })}
+					isInvalid={!!errors.domain}
+					errorMessage={errors.domain?.message}
+					isRequired
 				/>
-				{errors.domain && <FormValidationErrorMessage message="This field is required" />}
-				<label htmlFor="subdomain" className="self-start mt-3 text-xs font-semibold">
-					Subdomain
-				</label>
-				<input
-					id="subdomain"
+				<Input
 					type="text"
-					className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
+					label="Subdomain"
 					{...register('request.subdomain')}
+					isInvalid={!!errors.request?.subdomain}
+					errorMessage={errors.request?.subdomain?.message}
 				/>
-				<label htmlFor="data" className="self-start mt-3 text-xs font-semibold">
-					IP Address or Data<span className="ml-1 text-red-400">*</span>
-				</label>
-				<input
-					id="data"
+				<Textarea
 					type="text"
-					className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
+					label="Data or IP address"
 					{...register('request.data', { required: true })}
+					isInvalid={!!errors.request?.data}
+					errorMessage={errors.request?.data?.message}
+					isRequired
 				/>
-				{errors.request?.data && <FormValidationErrorMessage message="This field is required" />}
-				<label htmlFor="data" className="self-start mt-3 text-xs font-semibold">
-					TTL
-				</label>
-				<input
-					id="data"
+				<Input
+					label="TTL"
 					type="number"
-					className="flex items-center h-12 px-4 mt-2 rounded focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
 					{...register('request.ttl', { min: 300, max: 172800 })}
+					isInvalid={!!errors.request?.ttl}
+					errorMessage={errors.request?.ttl?.message}
+					isRequired
 				/>
-				{errors.request?.ttl && <FormValidationErrorMessage message="TTL must be between 300 and 172800" />}
-				<label htmlFor="type" className="self-start mt-3 text-xs font-semibold">
-					Record Type
-				</label>
-				<div className="flex flex-row justify-center">
-					<select
-						id="type"
-						className="flex mt-2 rounded w-full
-                        focus:outline-none focus:ring-2 focus:border-indigo-400 focus:ring-indigo-400 bg-gray-600"
-						{...register('request.type')}
-					>
-						{Object.keys(models_RecordType).map(key => {
-							return (
-								<option key={key} value={key}>
-									{key}
-								</option>
-							);
-						})}
-					</select>
-				</div>
-				<div className="text-left py-2">
-					<input
-						type="checkbox"
-						id="commit"
-						aria-label="Commit"
-						className="mr-2 rounded-sm checked:bg-indigo-400 checked:focus:bg-indigo-400 checked:hover:bg-indigo-400"
-						{...register('request.autocommit')}
-					/>
-					<label htmlFor="commit" className="text-sm font-semibold">
-						Commit
-					</label>
-				</div>
-				<button
-					type="submit"
-					className="flex items-center justify-center h-12 px-6 mt-2 text-sm font-semibold rounded dark:bg-indigo-400 hover:bg-indigo-800"
-				>
+				<Select label="Type" {...register('request.type')} isRequired isInvalid={!!errors.request?.type}>
+					{Object.keys(models_RecordType).map(key => {
+						return (
+							<SelectItem key={key} value={key}>
+								{key}
+							</SelectItem>
+						);
+					})}
+				</Select>
+				<Checkbox type="checkbox" aria-label="Commit" {...register('request.autocommit')}>
+					Commit
+				</Checkbox>
+				<Button type="submit" size="lg" color="primary">
 					Save
-				</button>
-				<button
-					type="reset"
-					className="flex items-center justify-center h-12 px-6 mt-2 text-sm font-semibold rounded dark:bg-red-400 hover:bg-red-800"
-				>
+				</Button>
+				<Button type="reset" size="lg" color="danger">
 					Clear
-				</button>
+				</Button>
 			</form>
 		</div>
 	) : (

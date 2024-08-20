@@ -1,11 +1,11 @@
-import { AuthService, models_Login, OpenAPI } from '../api';
+import { AuthService, OpenAPI, type models_Login } from '../api';
 
 const _localAppTokenStorageKey: string = 'jwt';
 const _localAppTokenExpirationStorageKey: string = 'jwt_exp';
 
 const getToken = async (credentials?: models_Login): Promise<{ success: boolean; token?: string }> => {
 	const localToken = localStorage.getItem(_localAppTokenStorageKey);
-	let token;
+	let token = '';
 
 	if (localToken != null && !isTokenExpired()) {
 		token = localToken;
@@ -40,7 +40,7 @@ const setTokenExpiration = (expiresIn: number) => {
 };
 
 const getTokenExpiration = (expiresIn: number): Date => {
-	let expirationDate = new Date();
+	const expirationDate = new Date();
 	expirationDate.setHours(expirationDate.getHours() + expiresIn);
 
 	return expirationDate;
@@ -51,4 +51,4 @@ const revokeToken = () => {
 	localStorage.removeItem(_localAppTokenExpirationStorageKey);
 };
 
-export { getToken, isTokenExpired, setTokenExpiration, getTokenExpiration, revokeToken };
+export { getToken, getTokenExpiration, isTokenExpired, revokeToken, setTokenExpiration };

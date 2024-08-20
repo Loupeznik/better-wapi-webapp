@@ -5,20 +5,12 @@ export const Navbar = () => {
 	const pathname = useLocation();
 
 	return (
-		<header className="p-4 dark:bg-stone-800 dark:text-gray-100">
+		<header className="p-4">
 			<div className="container flex justify-between h-16 mx-auto md:justify-center md:space-x-8">
 				<ul className="items-stretch hidden space-x-3 md:flex">
-					<NavLink title="Home" link="/" isActive={pathname.pathname == '/' ? true : false} />
-					<NavLink
-						title="Create a DNS record"
-						link="/new"
-						isActive={pathname.pathname == '/new' ? true : false}
-					/>
-					<NavLink
-						title="List DNS records"
-						link="/records"
-						isActive={pathname.pathname == '/records' ? true : false}
-					/>
+					<NavLink title="Home" link="/" isActive={pathname.pathname === '/'} />
+					<NavLink title="Create a DNS record" link="/new" isActive={pathname.pathname === '/new'} />
+					<NavLink title="List DNS records" link="/records" isActive={pathname.pathname === '/records'} />
 				</ul>
 			</div>
 		</header>
