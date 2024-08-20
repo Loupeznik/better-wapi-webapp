@@ -1,4 +1,4 @@
-import { Input, Select, SelectItem, Spinner, Switch } from '@nextui-org/react';
+import { Input, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Spinner, Switch } from '@nextui-org/react';
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -82,7 +82,18 @@ export const DomainList = (props: DomainListProps) => {
 				header: 'Data',
 				cell: info => {
 					const data = info.cell.getValue();
-					return data && data.length > 50 ? `${data.slice(0, 50)}...` : data;
+					return data && data.length > 50 ? (
+						<Popover placement="left-end">
+							<PopoverTrigger>
+								<span className="cursor-pointer">{`${data.slice(0, 50)}...`}</span>
+							</PopoverTrigger>
+							<PopoverContent>
+								<span className="text-xs max-w-sm overflow-y-auto text-wrap break-all ">{data}</span>
+							</PopoverContent>
+						</Popover>
+					) : (
+						data
+					);
 				},
 				enableColumnFilter: true,
 				id: 'rdata',
