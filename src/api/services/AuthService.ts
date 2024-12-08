@@ -1,15 +1,13 @@
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
 import type { models_Login } from '../models/models_Login';
 import type { models_TokenResponse } from '../models/models_TokenResponse';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class AuthService {
-
     /**
      * Get token
      * @param request Request body
@@ -17,8 +15,8 @@ export class AuthService {
      * @throws ApiError
      */
     public static postAuthToken(
-request: models_Login,
-): CancelablePromise<models_TokenResponse> {
+        request: models_Login,
+    ): CancelablePromise<models_TokenResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/auth/token',
@@ -29,5 +27,4 @@ request: models_Login,
             },
         });
     }
-
 }
