@@ -10,7 +10,6 @@ import { domainSlice } from "../redux/slices/domainSlice";
 import { deleteRecord } from "../redux/thunks/records/deleteRecord";
 import { fetchRecords } from "../redux/thunks/records/fetchRecords";
 import { Button, Input } from "@nextui-org/react";
-import { FiSearch } from "react-icons/fi";
 
 export const RecordsPage = () => {
 	const domain = useSelector((state: RootState) => state.domain);
@@ -97,6 +96,11 @@ export const RecordsPage = () => {
 					id="search"
 					ref={domainRef}
 					defaultValue={activeDomain}
+					onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+						if (event.key === "Enter") {
+							handleDomainChange();
+						}
+					}}
 				/>
 				<Button size="lg" variant="ghost" onClick={handleDomainChange}>
 					Search
