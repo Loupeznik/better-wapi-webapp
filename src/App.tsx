@@ -45,7 +45,7 @@ function App() {
 					<UncommitedChangesAlert />
 				</div>
 			)}
-			<Card className="w-3/4 mx-auto my-4">
+			<Card className="lg:w-3/4 lg:mx-auto my-4 mx-4">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/new" element={<CreateRecordPage />} />

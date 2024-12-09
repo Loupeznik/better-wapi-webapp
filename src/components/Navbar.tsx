@@ -1,18 +1,44 @@
-import { useLocation } from 'react-router-dom';
-import { NavLink } from './NavLink';
+import { useLocation } from "react-router-dom";
+import {
+	Link,
+	NavbarContent,
+	NavbarItem,
+	Navbar as NextNavbar,
+} from "@nextui-org/react";
+import { Link as RouterLink } from "react-router-dom";
 
 export const Navbar = () => {
 	const pathname = useLocation();
 
+	const navItems = [
+		{ label: "Home", path: "/", isActive: pathname.pathname === "/" },
+		{
+			label: "Create a DNS record",
+			path: "/new",
+			isActive: pathname.pathname === "/new",
+		},
+		{
+			label: "List DNS records",
+			path: "/records",
+			isActive: pathname.pathname === "/records",
+		},
+	];
+
 	return (
-		<header className="p-4">
-			<div className="container flex justify-between h-16 mx-auto md:justify-center md:space-x-8">
-				<ul className="items-stretch hidden space-x-3 md:flex">
-					<NavLink title="Home" link="/" isActive={pathname.pathname === '/'} />
-					<NavLink title="Create a DNS record" link="/new" isActive={pathname.pathname === '/new'} />
-					<NavLink title="List DNS records" link="/records" isActive={pathname.pathname === '/records'} />
-				</ul>
-			</div>
-		</header>
+		<NextNavbar>
+			<NavbarContent className="flex mx-auto" justify="center">
+				{navItems.map((item) => (
+					<NavbarItem key={item.label} isActive={item.isActive}>
+						<Link
+							color={item.isActive ? "primary" : "foreground"}
+							as={RouterLink}
+							to={item.path}
+						>
+							{item.label}
+						</Link>
+					</NavbarItem>
+				))}
+			</NavbarContent>
+		</NextNavbar>
 	);
 };

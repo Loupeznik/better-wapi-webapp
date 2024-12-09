@@ -1,4 +1,19 @@
-import { Input, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Spinner, Switch } from '@nextui-org/react';
+import {
+	Input,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	Select,
+	SelectItem,
+	Spinner,
+	Switch,
+	Table as NextTable,
+	TableBody,
+	TableCell,
+	TableColumn,
+	TableHeader,
+	TableRow,
+} from "@nextui-org/react";
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -11,8 +26,8 @@ import {
 	getPaginationRowModel,
 	getSortedRowModel,
 	useReactTable,
-} from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 import {
 	FiChevronLeft,
 	FiChevronRight,
@@ -20,15 +35,14 @@ import {
 	FiChevronsLeft,
 	FiChevronsRight,
 	FiChevronsUp,
-	FiEdit,
 	FiSearch,
 	FiTrash2,
-} from 'react-icons/fi';
-import type { models_Record } from '../api';
+} from "react-icons/fi";
+import type { models_Record } from "../api";
+import { UpdateForm } from "./UpdateForm";
 
 type DomainListProps = {
 	subdomains: models_Record[] | undefined;
-	handleEditRecord: (subdomain: models_Record) => void;
 	handleDeleteRecord: (subdomain: string, id: number) => void;
 	domain: string | undefined;
 	isLoading: boolean;
@@ -38,49 +52,57 @@ type RecordWithActions = models_Record & {
 	actions: JSX.Element;
 };
 
-const includesFilterFn = (row: Row<RecordWithActions>, columnId: string, filterValue: string): boolean => {
+const includesFilterFn = (
+	row: Row<RecordWithActions>,
+	columnId: string,
+	filterValue: string,
+): boolean => {
 	const cellValue = row.getValue(columnId) as string;
 	return cellValue?.includes(filterValue);
 };
 
 export const DomainList = (props: DomainListProps) => {
 	const [isDomainExpanded, setIsDomainExpanded] = useState<boolean>(false);
-	const allowedRecordTypes = ['A', 'AAAA', 'CNAME'];
+	const allowedRecordTypes = ["A", "AAAA", "CNAME"];
 	const canShowDomain = (type: string | undefined): boolean =>
-		isDomainExpanded && props.domain !== undefined && allowedRecordTypes.some(x => x === type);
+		isDomainExpanded &&
+		props.domain !== undefined &&
+		allowedRecordTypes.some((x) => x === type);
 
 	const columnHelper = createColumnHelper<RecordWithActions>();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const columns = useMemo(
 		() => [
-			columnHelper.accessor('ID', {
-				header: 'Record ID',
+			columnHelper.accessor("ID", {
+				header: "Record ID",
 				enableColumnFilter: false,
 			}),
-			columnHelper.accessor('name', {
-				header: 'Name',
-				cell: info => (
+			columnHelper.accessor("name", {
+				header: "Name",
+				cell: (info) => (
 					<>
 						{info.cell.getValue()}
-						{canShowDomain(info.row.getValue('rdtype')) ? `.${props.domain}` : ''}
+						{canShowDomain(info.row.getValue("rdtype"))
+							? `.${props.domain}`
+							: ""}
 					</>
 				),
 				enableColumnFilter: true,
-				id: 'name',
+				id: "name",
 				filterFn: includesFilterFn,
 			}),
-			columnHelper.accessor('ttl', {
-				header: 'TTL',
+			columnHelper.accessor("ttl", {
+				header: "TTL",
 				enableColumnFilter: false,
 			}),
-			columnHelper.accessor('rdtype', {
-				header: 'Record Type',
+			columnHelper.accessor("rdtype", {
+				header: "Record Type",
 				enableColumnFilter: false,
 			}),
-			columnHelper.accessor('rdata', {
-				header: 'Data',
-				cell: info => {
+			columnHelper.accessor("rdata", {
+				header: "Data",
+				cell: (info) => {
 					const data = info.cell.getValue();
 					return data && data.length > 50 ? (
 						<Popover placement="left-end">
@@ -88,7 +110,9 @@ export const DomainList = (props: DomainListProps) => {
 								<span className="cursor-pointer">{`${data.slice(0, 50)}...`}</span>
 							</PopoverTrigger>
 							<PopoverContent>
-								<span className="text-xs max-w-sm overflow-y-auto text-wrap break-all ">{data}</span>
+								<span className="text-xs max-w-sm overflow-y-auto text-wrap break-all">
+									{data}
+								</span>
 							</PopoverContent>
 						</Popover>
 					) : (
@@ -96,20 +120,20 @@ export const DomainList = (props: DomainListProps) => {
 					);
 				},
 				enableColumnFilter: true,
-				id: 'rdata',
+				id: "rdata",
 				filterFn: includesFilterFn,
 			}),
-			columnHelper.accessor('changed_date', {
-				header: 'Updated at',
+			columnHelper.accessor("changed_date", {
+				header: "Updated at",
 				enableColumnFilter: false,
 			}),
-			columnHelper.accessor('author_comment', {
-				header: 'Comment',
+			columnHelper.accessor("author_comment", {
+				header: "Comment",
 				enableColumnFilter: false,
 			}),
-			columnHelper.accessor('actions', {
-				header: () => 'Actions',
-				cell: info => info.renderValue(),
+			columnHelper.accessor("actions", {
+				header: () => "Actions",
+				cell: (info) => info.renderValue(),
 				enableColumnFilter: false,
 			}),
 		],
@@ -117,29 +141,34 @@ export const DomainList = (props: DomainListProps) => {
 	);
 
 	const filterableColumns = useMemo(() => {
-		return columns.filter(x => x.enableColumnFilter);
+		return columns.filter((x) => x.enableColumnFilter);
 	}, [columns]);
 
 	const [filteringBy, setFilteringBy] = useState<string | undefined>(undefined);
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const recordsWithActions = useMemo(() => {
-		return props.subdomains?.map(subdomain => {
+		return props.subdomains?.map((subdomain) => {
 			const actions = (
-				<div className="flex flex-row text-lg justify-center" key={subdomain.ID}>
-					<FiEdit
-						className="mx-1 hover:text-yellow-600 cursor-pointer"
-						onClick={() => props.handleEditRecord(subdomain)}
-					/>
+				<div
+					className="flex flex-row text-lg justify-center"
+					key={subdomain.ID}
+				>
+					<UpdateForm record={subdomain} domain={props.domain as string} />
 					<FiTrash2
 						className="mx-1 hover:text-red-600 cursor-pointer"
-						onClick={() => props.handleDeleteRecord(subdomain.name as string, Number(subdomain.ID))}
+						onClick={() =>
+							props.handleDeleteRecord(
+								subdomain.name as string,
+								Number(subdomain.ID),
+							)
+						}
 					/>
 				</div>
 			);
 			return { ...subdomain, actions };
 		});
-	}, [props.subdomains, props.handleEditRecord, props.handleDeleteRecord]);
+	}, [props.subdomains, props.domain, props.handleDeleteRecord]);
 
 	const table = useReactTable({
 		data: recordsWithActions ?? [],
@@ -170,79 +199,88 @@ export const DomainList = (props: DomainListProps) => {
 					setIsDomainExpanded={setIsDomainExpanded}
 					filterableColumns={filterableColumns}
 				/>
-				<table className="min-w-full text-xs mt-4">
-					<thead className="dark:bg-gray-700">
-						{table.getHeaderGroups().map(headerGroup => (
-							<tr key={headerGroup.id}>
-								{headerGroup.headers.map(header => {
-									return (
-										<th key={header.id} colSpan={header.colSpan} className="p-3">
-											{header.isPlaceholder ? null : (
-												<>
-													<div
-														{...{
-															className: header.column.getCanSort()
-																? 'cursor-pointer select-none flex flex-row justify-center gap-2'
-																: '',
-															onClick: header.column.getToggleSortingHandler(),
-														}}
-													>
-														{flexRender(
-															header.column.columnDef.header,
-															header.getContext(),
-														)}
-														{{
-															asc: <FiChevronsUp />,
-															desc: <FiChevronsDown />,
-														}[header.column.getIsSorted() as string] ?? null}
-													</div>
-												</>
-											)}
-										</th>
-									);
-								})}
-							</tr>
-						))}
-					</thead>
-					<tbody>
+				<NextTable>
+					<TableHeader>
+						{table.getHeaderGroups()[0].headers.map((header) => {
+							return (
+								<TableColumn
+									key={header.id}
+									colSpan={header.colSpan}
+									className="p-3"
+								>
+									{header.isPlaceholder ? null : (
+										<>
+											<div
+												{...{
+													className: header.column.getCanSort()
+														? "cursor-pointer select-none flex flex-row justify-center gap-2"
+														: "",
+													onClick: header.column.getToggleSortingHandler(),
+												}}
+											>
+												{flexRender(
+													header.column.columnDef.header,
+													header.getContext(),
+												)}
+												{{
+													asc: <FiChevronsUp />,
+													desc: <FiChevronsDown />,
+												}[header.column.getIsSorted() as string] ?? null}
+											</div>
+										</>
+									)}
+								</TableColumn>
+							);
+						})}
+					</TableHeader>
+					<TableBody>
 						{table.getRowCount() > 0 ? (
-							table.getRowModel().rows.map(row => {
+							table.getRowModel().rows.map((row) => {
 								return (
-									<tr
-										key={row.id}
-										className="border-b border-opacity-20 dark:border-gray-700 dark:bg-gray-900"
-									>
-										{row.getVisibleCells().map(cell => {
+									<TableRow key={row.id}>
+										{row.getVisibleCells().map((cell) => {
 											return (
-												<td key={cell.id} className="p-3">
-													{flexRender(cell.column.columnDef.cell, cell.getContext())}
-												</td>
+												<TableCell key={cell.id} className="p-3">
+													{flexRender(
+														cell.column.columnDef.cell,
+														cell.getContext(),
+													)}
+												</TableCell>
 											);
 										})}
-									</tr>
+									</TableRow>
 								);
 							})
 						) : (
-							<tr className="border-b border-opacity-20 dark:border-gray-700 dark:bg-gray-900">
+							<TableRow>
 								{Array.from(table.getAllColumns()).map((_, index) => (
-									<td key={index} className="p-3">
+									<TableCell key={index} className="p-3">
 										<p>-</p>
-									</td>
+									</TableCell>
 								))}
-							</tr>
+							</TableRow>
 						)}
-					</tbody>
-				</table>
+					</TableBody>
+				</NextTable>
 
 				<div className="h-2" />
 				<div className="flex items-center gap-2 justify-end">
-					<button onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
+					<button
+						onClick={() => table.setPageIndex(0)}
+						disabled={!table.getCanPreviousPage()}
+					>
 						<FiChevronsLeft />
 					</button>
-					<button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+					<button
+						onClick={() => table.previousPage()}
+						disabled={!table.getCanPreviousPage()}
+					>
 						<FiChevronLeft />
 					</button>
-					<button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+					<button
+						onClick={() => table.nextPage()}
+						disabled={!table.getCanNextPage()}
+					>
 						<FiChevronRight />
 					</button>
 					<button
@@ -255,7 +293,9 @@ export const DomainList = (props: DomainListProps) => {
 						<div>Page</div>
 						<strong>
 							{`${
-								table.getPageCount() > 0 ? table.getState().pagination.pageIndex + 1 : 0
+								table.getPageCount() > 0
+									? table.getState().pagination.pageIndex + 1
+									: 0
 							} of ${table.getPageCount()}`}
 						</strong>
 					</span>
@@ -300,15 +340,21 @@ const ColumnFilter = ({
 	setIsDomainExpanded: (value: boolean) => void;
 }) => {
 	return (
-		<div className="flex flex-row my-2 gap-8">
-			<div className="flex flex-row gap-2 w-full">
-				<FilterDropdown setFilteringBy={setFilteringBy} filterableColumns={filterableColumns} />
+		<div className="flex lg:flex-row flex-col my-2 gap-8">
+			<div className="flex lg:flex-row flex-col gap-2 w-full">
+				<FilterDropdown
+					setFilteringBy={setFilteringBy}
+					filterableColumns={filterableColumns}
+				/>
 				<Input
 					type="text"
 					size="lg"
-					startContent={<FiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />}
-					onChange={e =>
-						filteringBy !== undefined && table.getColumn(filteringBy)?.setFilterValue(e.target.value)
+					startContent={
+						<FiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+					}
+					onChange={(e) =>
+						filteringBy !== undefined &&
+						table.getColumn(filteringBy)?.setFilterValue(e.target.value)
 					}
 				/>
 			</div>
@@ -337,9 +383,9 @@ const FilterDropdown = ({
 			label="Select column for filtering"
 			className="max-w-xs"
 			size="sm"
-			onChange={e => setFilteringBy(e.target.value)}
+			onChange={(e) => setFilteringBy(e.target.value)}
 		>
-			{filterableColumns.map(x => (
+			{filterableColumns.map((x) => (
 				<SelectItem key={x.id as string}>{x.header as string}</SelectItem>
 			))}
 		</Select>

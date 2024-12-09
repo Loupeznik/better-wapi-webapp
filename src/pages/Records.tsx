@@ -1,11 +1,10 @@
 import type { UnknownAction } from "@reduxjs/toolkit";
-import { createRef, useEffect, useState } from "react";
+import { createRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { models_DeleteRowRequestV2, models_Record } from "../api";
+import type { models_DeleteRowRequestV2 } from "../api";
 import type { RootState } from "../app/store";
 import { DomainList } from "../components/DomainList";
 import { Login } from "../components/Login";
-import { UpdateForm } from "../components/UpdateForm";
 import { domainSlice } from "../redux/slices/domainSlice";
 import { deleteRecord } from "../redux/thunks/records/deleteRecord";
 import { fetchRecords } from "../redux/thunks/records/fetchRecords";
@@ -17,10 +16,6 @@ export const RecordsPage = () => {
 		(state: RootState) => state.user.isLoggedIn,
 	);
 	const dispatch = useDispatch();
-
-	const [isUpdateScreenVisible, setUpdateScreenVisible] =
-		useState<boolean>(false);
-	const [editedSubdomain, setEditedSubdomain] = useState<models_Record>();
 
 	const domainRef = createRef<HTMLInputElement>();
 	const activeDomain = domain.domain;
@@ -77,19 +72,14 @@ export const RecordsPage = () => {
 		}
 	};
 
-	const handleEditRecord = (subdomain: models_Record) => {
-		setEditedSubdomain(subdomain);
-		setUpdateScreenVisible(true);
-	};
-
 	return isUserLoggedIn ? (
-		<div className="text-center rounded-lg w-3/4 mx-auto items-center justify-center my-6 p-4">
+		<div className="text-center rounded-lg lg:mx-auto mx-4 items-center justify-center my-6 p-4">
 			<p>
 				{!activeDomain
 					? "Select domain to list records"
 					: `Listing records for domain ${activeDomain}`}
 			</p>
-			<div className="flex items-center justify-center space-x-4 mt-2">
+			<div className="flex flex-col lg:flex-row items-center gap-2 justify-center space-x-4 mt-2">
 				<Input
 					size="lg"
 					type="text"
@@ -109,20 +99,10 @@ export const RecordsPage = () => {
 
 			<DomainList
 				subdomains={domain.subdomains}
-				handleEditRecord={handleEditRecord}
 				handleDeleteRecord={handleDeleteRecord}
 				domain={activeDomain}
 				isLoading={domain.isLoading}
 			/>
-
-			{isUpdateScreenVisible && activeDomain && editedSubdomain ? (
-				<UpdateForm
-					domain={activeDomain}
-					record={editedSubdomain}
-					isVisible={isUpdateScreenVisible}
-					setVisible={setUpdateScreenVisible}
-				/>
-			) : null}
 		</div>
 	) : (
 		<Login />
