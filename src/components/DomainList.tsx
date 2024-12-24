@@ -214,7 +214,7 @@ export const DomainList = (props: DomainListProps) => {
 											<div
 												{...{
 													className: header.column.getCanSort()
-														? "cursor-pointer select-none flex flex-row justify-center gap-2"
+														? "cursor-pointer select-none flex flex-row justify-center items-center gap-2"
 														: "",
 													onClick: header.column.getToggleSortingHandler(),
 												}}
@@ -241,7 +241,10 @@ export const DomainList = (props: DomainListProps) => {
 									<TableRow key={row.id}>
 										{row.getVisibleCells().map((cell) => {
 											return (
-												<TableCell key={cell.id} className="p-3">
+												<TableCell
+													key={cell.id}
+													className={`${cell.column.id === "ID" ? "text-center" : undefined}`}
+												>
 													{flexRender(
 														cell.column.columnDef.cell,
 														cell.getContext(),
