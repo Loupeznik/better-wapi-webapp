@@ -40,6 +40,7 @@ import {
 } from "react-icons/fi";
 import type { models_Record } from "../api";
 import { UpdateForm } from "./UpdateForm";
+import { isNoUOrEmptyString } from "../utils";
 
 type DomainListProps = {
 	subdomains: models_Record[] | undefined;
@@ -58,7 +59,7 @@ const includesFilterFn = (
 	filterValue: string,
 ): boolean => {
 	const cellValue = row.getValue(columnId) as string;
-	return cellValue?.includes(filterValue);
+	return !isNoUOrEmptyString(cellValue) && cellValue?.includes(filterValue);
 };
 
 export const DomainList = (props: DomainListProps) => {
