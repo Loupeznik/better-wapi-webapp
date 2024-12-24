@@ -81,12 +81,12 @@ export const DomainList = (props: DomainListProps) => {
 			columnHelper.accessor("name", {
 				header: "Name",
 				cell: (info) => (
-					<>
+					<span>
 						{info.cell.getValue()}
 						{canShowDomain(info.row.getValue("rdtype"))
 							? `.${props.domain}`
 							: ""}
-					</>
+					</span>
 				),
 				enableColumnFilter: true,
 				id: "name",
@@ -116,7 +116,7 @@ export const DomainList = (props: DomainListProps) => {
 							</PopoverContent>
 						</Popover>
 					) : (
-						data
+						<span>{data}</span>
 					);
 				},
 				enableColumnFilter: true,
@@ -144,7 +144,7 @@ export const DomainList = (props: DomainListProps) => {
 		return columns.filter((x) => x.enableColumnFilter);
 	}, [columns]);
 
-	const [filteringBy, setFilteringBy] = useState<string | undefined>(undefined);
+	const [filteringBy, setFilteringBy] = useState<string | undefined>("name");
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const recordsWithActions = useMemo(() => {
@@ -190,7 +190,7 @@ export const DomainList = (props: DomainListProps) => {
 
 	const renderTable = () => {
 		return (
-			<div className="overflow-x-auto rounded-lg">
+			<div className="overflow-x-auto rounded-lg min-w-max">
 				<ColumnFilter
 					setFilteringBy={setFilteringBy}
 					filteringBy={filteringBy}
@@ -305,11 +305,9 @@ export const DomainList = (props: DomainListProps) => {
 	};
 
 	return (
-		<div>
-			<div className="container p-2 mx-auto sm:p-4">
-				<h2 className="mb-4 text-2xl font-semibold leading-tight">Records</h2>
-				{props.isLoading ? <Spinner size="lg" /> : renderTable()}
-			</div>
+		<div className="container p-2 mx-auto sm:p-4">
+			<h2 className="mb-4 text-2xl font-semibold leading-tight">Records</h2>
+			{props.isLoading ? <Spinner size="lg" /> : renderTable()}
 		</div>
 	);
 };
@@ -384,6 +382,7 @@ const FilterDropdown = ({
 			className="max-w-xs"
 			size="sm"
 			onChange={(e) => setFilteringBy(e.target.value)}
+			defaultSelectedKeys={["name"]}
 		>
 			{filterableColumns.map((x) => (
 				<SelectItem key={x.id as string}>{x.header as string}</SelectItem>

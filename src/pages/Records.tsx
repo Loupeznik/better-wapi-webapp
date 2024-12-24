@@ -73,7 +73,7 @@ export const RecordsPage = () => {
 	};
 
 	return isUserLoggedIn ? (
-		<div className="text-center rounded-lg lg:mx-auto mx-4 items-center justify-center my-6 p-4">
+		<div className="text-center rounded-lg lg:mx-auto mx-4 items-center justify-center my-6 p-4 min-w-full">
 			<p>
 				{!activeDomain
 					? "Select domain to list records"
@@ -92,7 +92,7 @@ export const RecordsPage = () => {
 						}
 					}}
 				/>
-				<Button size="lg" variant="ghost" onClick={handleDomainChange}>
+				<Button size="lg" variant="ghost" onPress={handleDomainChange}>
 					Search
 				</Button>
 			</div>
