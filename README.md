@@ -2,6 +2,8 @@
 
 A web frontend for [Better WAPI](https://github.com/Loupeznik/better-wapi)
 
+![Docker Image Version](https://img.shields.io/docker/v/loupeznik/better-wapi-webapp?style=for-the-badge&logo=docker&link=https%3A%2F%2Fhub.docker.com%2Fr%2Floupeznik%2Fbetter-wapi-webapp%2Ftags)
+
 ## Running
 
 ```bash
