@@ -40,6 +40,7 @@ import {
 } from "react-icons/fi";
 import type { models_Record } from "../api";
 import { UpdateForm } from "./UpdateForm";
+import { isNoUOrEmptyString } from "../utils";
 
 type DomainListProps = {
 	subdomains: models_Record[] | undefined;
@@ -58,7 +59,7 @@ const includesFilterFn = (
 	filterValue: string,
 ): boolean => {
 	const cellValue = row.getValue(columnId) as string;
-	return cellValue?.includes(filterValue);
+	return !isNoUOrEmptyString(cellValue) && cellValue?.includes(filterValue);
 };
 
 export const DomainList = (props: DomainListProps) => {
@@ -81,12 +82,12 @@ export const DomainList = (props: DomainListProps) => {
 			columnHelper.accessor("name", {
 				header: "Name",
 				cell: (info) => (
-					<>
+					<span>
 						{info.cell.getValue()}
 						{canShowDomain(info.row.getValue("rdtype"))
 							? `.${props.domain}`
 							: ""}
-					</>
+					</span>
 				),
 				enableColumnFilter: true,
 				id: "name",
@@ -116,7 +117,7 @@ export const DomainList = (props: DomainListProps) => {
 							</PopoverContent>
 						</Popover>
 					) : (
-						data
+						<span>{data}</span>
 					);
 				},
 				enableColumnFilter: true,
@@ -144,7 +145,7 @@ export const DomainList = (props: DomainListProps) => {
 		return columns.filter((x) => x.enableColumnFilter);
 	}, [columns]);
 
-	const [filteringBy, setFilteringBy] = useState<string | undefined>(undefined);
+	const [filteringBy, setFilteringBy] = useState<string | undefined>("name");
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const recordsWithActions = useMemo(() => {
@@ -190,7 +191,7 @@ export const DomainList = (props: DomainListProps) => {
 
 	const renderTable = () => {
 		return (
-			<div className="overflow-x-auto rounded-lg">
+			<div className="overflow-x-auto rounded-lg min-w-max">
 				<ColumnFilter
 					setFilteringBy={setFilteringBy}
 					filteringBy={filteringBy}
@@ -213,7 +214,7 @@ export const DomainList = (props: DomainListProps) => {
 											<div
 												{...{
 													className: header.column.getCanSort()
-														? "cursor-pointer select-none flex flex-row justify-center gap-2"
+														? "cursor-pointer select-none flex flex-row justify-center items-center gap-2"
 														: "",
 													onClick: header.column.getToggleSortingHandler(),
 												}}
@@ -240,7 +241,10 @@ export const DomainList = (props: DomainListProps) => {
 									<TableRow key={row.id}>
 										{row.getVisibleCells().map((cell) => {
 											return (
-												<TableCell key={cell.id} className="p-3">
+												<TableCell
+													key={cell.id}
+													className={`${cell.column.id === "ID" ? "text-center" : undefined}`}
+												>
 													{flexRender(
 														cell.column.columnDef.cell,
 														cell.getContext(),
@@ -305,11 +309,9 @@ export const DomainList = (props: DomainListProps) => {
 	};
 
 	return (
-		<div>
-			<div className="container p-2 mx-auto sm:p-4">
-				<h2 className="mb-4 text-2xl font-semibold leading-tight">Records</h2>
-				{props.isLoading ? <Spinner size="lg" /> : renderTable()}
-			</div>
+		<div className="container p-2 mx-auto sm:p-4">
+			<h2 className="mb-4 text-2xl font-semibold leading-tight">Records</h2>
+			{props.isLoading ? <Spinner size="lg" /> : renderTable()}
 		</div>
 	);
 };
@@ -384,6 +386,7 @@ const FilterDropdown = ({
 			className="max-w-xs"
 			size="sm"
 			onChange={(e) => setFilteringBy(e.target.value)}
+			defaultSelectedKeys={["name"]}
 		>
 			{filterableColumns.map((x) => (
 				<SelectItem key={x.id as string}>{x.header as string}</SelectItem>
