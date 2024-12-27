@@ -11,10 +11,10 @@ import {
 } from "@nextui-org/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import { FiEdit } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import type { models_Record, models_SaveRowRequest } from "../api";
 import { updateRecord } from "../redux/thunks/records/updateRecord";
-import { FiEdit } from "react-icons/fi";
 
 type UpdateFormProps = {
 	record: models_Record;
@@ -53,6 +53,7 @@ export const UpdateForm = ({ record, domain }: UpdateFormProps) => {
 			data: data.data,
 			autocommit: data.autocommit,
 			ttl: data.ttl,
+			type: record.rdtype as models_SaveRowRequest["type"],
 		};
 
 		dispatch(
