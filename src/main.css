@@ -7,3 +7,7 @@
 * {
     font-family: 'Roboto Mono', monospace;
 }
+
+html {
+    background-color: black;
+}

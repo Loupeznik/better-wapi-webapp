@@ -4,19 +4,22 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { OpenAPI } from "./api";
+import type { RootState } from "./app/store";
 import { Navbar } from "./components/Navbar";
-import loadConfig from "./helpers/ConfigHelpers";
+import { UncommitedChangesAlert } from "./components/UncommitedChangesAlert";
+import loadConfig, { type AuthMode } from "./helpers/ConfigHelpers";
 import { CreateRecordPage } from "./pages/Create";
 import { HomePage } from "./pages/Home";
 import { RecordsPage } from "./pages/Records";
 import { userSlice } from "./redux/slices/userSlice";
-import type { RootState } from "./app/store";
-import { UncommitedChangesAlert } from "./components/UncommitedChangesAlert";
 
 function App() {
+	let authMode: AuthMode;
+
 	loadConfig().then(
 		(config) => {
 			OpenAPI.BASE = config.API_BASE_URL;
+			authMode = config.AUTH_MODE;
 		},
 		(error) => {
 			throw error;
@@ -31,10 +34,6 @@ function App() {
 	useEffect(() => {
 		dispatch(userSlice.actions.checkIfLoggedIn());
 	}, [dispatch]);
-
-	useEffect(() => {
-		console.log("hasUncommitedChanges", hasUncommitedChanges);
-	}, [hasUncommitedChanges]);
 
 	return (
 		<div className="dark text-foreground bg-background min-h-screen">
