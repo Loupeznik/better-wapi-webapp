@@ -1,7 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { loginUser } from '../thunks/users/loginUser';
-import { getTokenExpiration, isTokenExpired, revokeToken } from '../../helpers/SecurityHelpers';
-import { OpenAPI } from '../../api';
+import { createSlice } from "@reduxjs/toolkit";
+import { OpenAPI } from "../../api";
+import {
+	getTokenExpiration,
+	isTokenExpired,
+	revokeToken,
+} from "../../helpers/SecurityHelpers";
+import { loginUser } from "../thunks/users/loginUser";
 
 type UserState = {
 	isLoggedIn: boolean;
@@ -12,22 +16,22 @@ type UserState = {
 };
 
 const initialState: UserState = {
-	token: localStorage.getItem('jwt') ?? undefined,
+	token: localStorage.getItem("jwt") ?? undefined,
 	isLoggedIn: false,
 	isLoading: false,
 };
 
 export const userSlice = createSlice({
-	name: 'user',
+	name: "user",
 	initialState,
-	extraReducers: builder => {
+	extraReducers: (builder) => {
 		builder
-			.addCase(loginUser.pending, state => {
+			.addCase(loginUser.pending, (state) => {
 				state.isLoading = true;
 			})
-			.addCase(loginUser.rejected, state => {
+			.addCase(loginUser.rejected, (state) => {
 				state.isLoading = false;
-				state.error = 'Failed to login';
+				state.error = "Failed to login";
 			})
 			.addCase(loginUser.fulfilled, (state, action) => {
 				state.isLoading = false;
@@ -37,13 +41,16 @@ export const userSlice = createSlice({
 			});
 	},
 	reducers: {
-		logoutUser: state => {
+		logoutUser: (state) => {
 			state.isLoggedIn = false;
 			state.token = undefined;
 			state.tokenExpiration = undefined;
 			revokeToken();
 		},
-		checkIfLoggedIn: state => {
+		loginOAuth: (state) => {
+			state.isLoggedIn = true;
+		},
+		checkIfLoggedIn: (state) => {
 			const isLoggedIn = state.token !== undefined && !isTokenExpired();
 			state.isLoggedIn = isLoggedIn;
 

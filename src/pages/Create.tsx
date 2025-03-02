@@ -12,10 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { models_RecordType } from "../api";
 import type { RootState } from "../app/store";
 import { Login } from "../components/Login";
+import type { PageWithAuthProps } from "../models/PageWithAuthProps";
 import type { SaveRecordForm } from "../models/SaveRecordForm";
 import { addRecord } from "../redux/thunks/records/addRecord";
 
-export const CreateRecordPage = () => {
+export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 	const currentDomain = useSelector((state: RootState) => state.domain.domain);
 	const isUserLoggedIn = useSelector(
 		(state: RootState) => state.user.isLoggedIn,
@@ -111,6 +112,6 @@ export const CreateRecordPage = () => {
 			</form>
 		</div>
 	) : (
-		<Login />
+		<Login auth={auth} />
 	);
 };

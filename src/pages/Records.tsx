@@ -1,3 +1,4 @@
+import { Button, Input } from "@nextui-org/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { createRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,12 +6,12 @@ import type { models_DeleteRowRequestV2 } from "../api";
 import type { RootState } from "../app/store";
 import { DomainList } from "../components/DomainList";
 import { Login } from "../components/Login";
+import type { PageWithAuthProps } from "../models/PageWithAuthProps";
 import { domainSlice } from "../redux/slices/domainSlice";
 import { deleteRecord } from "../redux/thunks/records/deleteRecord";
 import { fetchRecords } from "../redux/thunks/records/fetchRecords";
-import { Button, Input } from "@nextui-org/react";
 
-export const RecordsPage = () => {
+export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 	const domain = useSelector((state: RootState) => state.domain);
 	const isUserLoggedIn = useSelector(
 		(state: RootState) => state.user.isLoggedIn,
@@ -105,6 +106,6 @@ export const RecordsPage = () => {
 			/>
 		</div>
 	) : (
-		<Login />
+		<Login auth={auth} />
 	);
 };

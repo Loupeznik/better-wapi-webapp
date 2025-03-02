@@ -1,3 +1,7 @@
 {
-	"API_BASE_URL": "http://localhost:8000/api"
+	"API_BASE_URL": "http://localhost:8000/api",
+	"AUTH_MODE": "internal-jwt",
+	"OAUTH2_AUTHORITY": "",
+	"OAUTH2_CLIENT_ID": "",
+	"OAUTH2_REDIRECT_URI": "http://localhost:8033"
 }

@@ -1,11 +1,13 @@
-import { AuthService, OpenAPI, type models_Login } from '../api';
+import { AuthService, OpenAPI, type models_Login } from "../api";
 
-const _localAppTokenStorageKey: string = 'jwt';
-const _localAppTokenExpirationStorageKey: string = 'jwt_exp';
+const _localAppTokenStorageKey: string = "jwt";
+const _localAppTokenExpirationStorageKey: string = "jwt_exp";
 
-const getToken = async (credentials?: models_Login): Promise<{ success: boolean; token?: string }> => {
+const getToken = async (
+	credentials?: models_Login,
+): Promise<{ success: boolean; token?: string }> => {
 	const localToken = localStorage.getItem(_localAppTokenStorageKey);
-	let token = '';
+	let token = "";
 
 	if (localToken != null && !isTokenExpired()) {
 		token = localToken;
@@ -29,14 +31,21 @@ const getToken = async (credentials?: models_Login): Promise<{ success: boolean;
 };
 
 const isTokenExpired = (): boolean => {
-	const localTokenExpiration = localStorage.getItem(_localAppTokenExpirationStorageKey);
-	return localTokenExpiration === null ? false : Date.now() > Date.parse(localTokenExpiration);
+	const localTokenExpiration = localStorage.getItem(
+		_localAppTokenExpirationStorageKey,
+	);
+	return localTokenExpiration === null
+		? false
+		: Date.now() > Date.parse(localTokenExpiration);
 };
 
 const setTokenExpiration = (expiresIn: number) => {
 	const expiration = getTokenExpiration(expiresIn);
 
-	localStorage.setItem(_localAppTokenExpirationStorageKey, expiration.toUTCString());
+	localStorage.setItem(
+		_localAppTokenExpirationStorageKey,
+		expiration.toUTCString(),
+	);
 };
 
 const getTokenExpiration = (expiresIn: number): Date => {
@@ -51,4 +60,10 @@ const revokeToken = () => {
 	localStorage.removeItem(_localAppTokenExpirationStorageKey);
 };
 
-export { getToken, getTokenExpiration, isTokenExpired, revokeToken, setTokenExpiration };
+export {
+	getToken,
+	getTokenExpiration,
+	isTokenExpired,
+	revokeToken,
+	setTokenExpiration,
+};

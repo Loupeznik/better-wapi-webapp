@@ -1,57 +1,74 @@
-import { Card } from "@nextui-org/react";
-import { useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Spinner } from "@nextui-org/react";
+import { AuthProvider, type AuthProviderProps } from "oidc-react";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { OpenAPI } from "./api";
-import type { RootState } from "./app/store";
-import { Navbar } from "./components/Navbar";
-import { UncommitedChangesAlert } from "./components/UncommitedChangesAlert";
-import loadConfig, { type AuthMode } from "./helpers/ConfigHelpers";
-import { CreateRecordPage } from "./pages/Create";
-import { HomePage } from "./pages/Home";
-import { RecordsPage } from "./pages/Records";
+import MainLayout from "./components/MainLayout";
+import OAuthWrapper from "./components/OAuthWrapper";
+import loadConfig, {
+	AuthMode,
+	getOidcConfig,
+	type AppConfig,
+} from "./helpers/ConfigHelpers";
+import { appSlice } from "./redux/slices/appSlice";
 import { userSlice } from "./redux/slices/userSlice";
+import { isNoUOrEmptyString } from "./utils";
 
 function App() {
-	let authMode: AuthMode;
-
-	loadConfig().then(
-		(config) => {
-			OpenAPI.BASE = config.API_BASE_URL;
-			authMode = config.AUTH_MODE;
-		},
-		(error) => {
-			throw error;
-		},
-	);
-
 	const dispatch = useDispatch();
-	const hasUncommitedChanges = useSelector(
-		(state: RootState) => state.domain.hasUncommitedData,
-	);
+	const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
+	const [oidcConfig, setOidcConfig] = useState<AuthProviderProps | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		dispatch(userSlice.actions.checkIfLoggedIn());
+	const onSignInHook = useCallback(() => {
+		dispatch(userSlice.actions.loginOAuth());
 	}, [dispatch]);
 
-	return (
-		<div className="dark text-foreground bg-background min-h-screen">
-			<Toaster />
-			<Navbar />
-			{hasUncommitedChanges === true && (
-				<div className="w-1/2 mx-auto">
-					<UncommitedChangesAlert />
-				</div>
+	const onSignOutHook = useCallback(() => {
+		dispatch(userSlice.actions.logoutUser());
+	}, [dispatch]);
+
+	useEffect(() => {
+		const loadConfiguration = async () => {
+			try {
+				const config = await loadConfig();
+				OpenAPI.BASE = config.API_BASE_URL;
+				setAppConfig(config);
+				dispatch(appSlice.actions.setConfig(config));
+
+				setOidcConfig(
+					config.AUTH_MODE === AuthMode.OAUTH2
+						? getOidcConfig(config, onSignInHook, onSignOutHook)
+						: null,
+				);
+			} catch (error) {
+				console.error("Failed to load configuration:", error);
+			}
+		};
+
+		loadConfiguration().then(() => setIsLoading(false));
+	}, [dispatch, onSignInHook, onSignOutHook]);
+
+	useEffect(() => {
+		if (appConfig && appConfig.AUTH_MODE !== AuthMode.OAUTH2) {
+			dispatch(userSlice.actions.checkIfLoggedIn());
+		}
+	}, [appConfig, dispatch]);
+
+	return isLoading ? (
+		<Spinner size="lg" />
+	) : (
+		<>
+			{appConfig?.AUTH_MODE === AuthMode.OAUTH2 &&
+			oidcConfig &&
+			!isNoUOrEmptyString(oidcConfig.authority) ? (
+				<AuthProvider {...oidcConfig}>
+					<OAuthWrapper />
+				</AuthProvider>
+			) : (
+				<MainLayout />
 			)}
-			<Card className="lg:w-3/4 lg:mx-auto my-4 mx-4">
-				<Routes>
-					<Route path="/" element={<HomePage />} />
-					<Route path="/new" element={<CreateRecordPage />} />
-					<Route path="/records" element={<RecordsPage />} />
-				</Routes>
-			</Card>
-		</div>
+		</>
 	);
 }
 
