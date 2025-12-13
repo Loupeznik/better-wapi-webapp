@@ -41,7 +41,7 @@ export const getOidcConfig = (
 			);
 		},
 		onSignOut: () => onSignOutHook(),
-		autoSignIn: false,
+		autoSignIn: true,
 		automaticSilentRenew: true,
 	} satisfies AuthProviderProps;
 };
