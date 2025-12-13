@@ -5,7 +5,7 @@ import {
 	Select,
 	SelectItem,
 	Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -90,7 +90,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				>
 					{Object.keys(models_RecordType).map((key) => {
 						return (
-							<SelectItem key={key} value={key}>
+							<SelectItem key={key}>
 								{key}
 							</SelectItem>
 						);

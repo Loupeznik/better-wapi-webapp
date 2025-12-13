@@ -1,4 +1,4 @@
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 import { AuthProvider, type AuthProviderProps } from "oidc-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";

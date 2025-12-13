@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 import {
 	type ApiError,
 	DomainService,
 	type models_DeleteRowRequestV2,
 	type models_ErrorResponse,
 } from "../../../api";
-import toast from "react-hot-toast";
 
 const typePrefix = "domain/deleteRecord";
 

@@ -8,7 +8,7 @@ import {
 	NavbarContent,
 	NavbarItem,
 	Navbar as NextNavbar,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useSelector } from "react-redux";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import type { RootState } from "../app/store";

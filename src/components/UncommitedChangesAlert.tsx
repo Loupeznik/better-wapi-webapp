@@ -1,8 +1,8 @@
-import { Alert, Button } from "@nextui-org/react";
-import { useDispatch, useSelector } from "react-redux";
-import { commitChanges } from "../redux/thunks/records/commit";
-import type { RootState } from "../app/store";
+import { Alert, Button } from "@heroui/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../app/store";
+import { commitChanges } from "../redux/thunks/records/commit";
 
 export const UncommitedChangesAlert = () => {
 	const dispatch = useDispatch();

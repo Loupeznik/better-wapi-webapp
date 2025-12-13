@@ -1,11 +1,11 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchRecords } from "../thunks/records/fetchRecords";
 import type { models_Record } from "../../api";
 import { addRecord } from "../thunks/records/addRecord";
-import { deleteRecord } from "../thunks/records/deleteRecord";
-import { updateRecord } from "../thunks/records/updateRecord";
 import { commitChanges } from "../thunks/records/commit";
+import { deleteRecord } from "../thunks/records/deleteRecord";
+import { fetchRecords } from "../thunks/records/fetchRecords";
+import { updateRecord } from "../thunks/records/updateRecord";
 
 type DomainState = {
 	domain: string;

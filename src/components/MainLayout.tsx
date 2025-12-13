@@ -1,4 +1,4 @@
-import { Card } from "@nextui-org/react";
+import { Card } from "@heroui/react";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";

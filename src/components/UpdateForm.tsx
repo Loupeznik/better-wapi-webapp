@@ -8,7 +8,7 @@ import {
 	ModalHeader,
 	Textarea,
 	useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { FiEdit } from "react-icons/fi";

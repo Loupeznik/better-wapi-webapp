@@ -10,7 +10,7 @@
 		"types:openapi": "openapi -i http://localhost:8000/docs/doc.json -o src/api"
 	},
 	"dependencies": {
-		"@nextui-org/react": "^2.6.11",
+		"@heroui/react": "^2.6.11",
 		"@reduxjs/toolkit": "^2.2.7",
 		"@tanstack/react-table": "^8.20.6",
 		"framer-motion": "^11.13.1",

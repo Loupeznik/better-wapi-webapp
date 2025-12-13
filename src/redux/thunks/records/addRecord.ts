@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 import {
 	type ApiError,
 	DomainService,
 	type models_SaveRowRequest,
 } from "../../../api";
-import toast from "react-hot-toast";
 
 const typePrefix = "domain/addRecord";
 

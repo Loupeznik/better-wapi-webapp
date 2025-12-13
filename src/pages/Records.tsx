@@ -1,4 +1,4 @@
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import { createRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

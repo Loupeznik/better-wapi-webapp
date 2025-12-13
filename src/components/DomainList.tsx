@@ -1,5 +1,6 @@
 import {
 	Input,
+	Table as NextTable,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
@@ -7,13 +8,12 @@ import {
 	SelectItem,
 	Spinner,
 	Switch,
-	Table as NextTable,
 	TableBody,
 	TableCell,
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -39,8 +39,8 @@ import {
 	FiTrash2,
 } from "react-icons/fi";
 import type { models_Record } from "../api";
-import { UpdateForm } from "./UpdateForm";
 import { isNoUOrEmptyString } from "../utils";
+import { UpdateForm } from "./UpdateForm";
 
 type DomainListProps = {
 	subdomains: models_Record[] | undefined;
