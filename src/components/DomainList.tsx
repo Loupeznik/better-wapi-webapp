@@ -351,6 +351,7 @@ const ColumnFilter = ({
 				<Input
 					type="text"
 					size="lg"
+					variant="flat"
 					startContent={
 						<FiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
 					}
@@ -385,6 +386,7 @@ const FilterDropdown = ({
 			label="Select column for filtering"
 			className="max-w-xs"
 			size="sm"
+			variant="flat"
 			onChange={(e) => setFilteringBy(e.target.value)}
 			defaultSelectedKeys={["name"]}
 		>

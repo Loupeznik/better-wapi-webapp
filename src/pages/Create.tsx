@@ -53,6 +53,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				<Input
 					type="text"
 					label="Domain"
+					variant="flat"
 					defaultValue={currentDomain}
 					{...register("domain", { required: true })}
 					isInvalid={!!errors.domain}
@@ -62,6 +63,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				<Input
 					type="text"
 					label="Subdomain"
+					variant="flat"
 					{...register("request.subdomain")}
 					isInvalid={!!errors.request?.subdomain}
 					errorMessage={errors.request?.subdomain?.message}
@@ -69,6 +71,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				<Textarea
 					type="text"
 					label="Data or IP address"
+					variant="flat"
 					{...register("request.data", { required: true })}
 					isInvalid={!!errors.request?.data}
 					errorMessage={errors.request?.data?.message}
@@ -77,6 +80,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				<Input
 					label="TTL"
 					type="number"
+					variant="flat"
 					{...register("request.ttl", { min: 300, max: 172800 })}
 					isInvalid={!!errors.request?.ttl}
 					errorMessage={errors.request?.ttl?.message}
@@ -84,6 +88,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				/>
 				<Select
 					label="Type"
+					variant="flat"
 					{...register("request.type")}
 					isRequired
 					isInvalid={!!errors.request?.type}

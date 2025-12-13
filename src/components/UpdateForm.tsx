@@ -87,12 +87,14 @@ export const UpdateForm = ({ record, domain }: UpdateFormProps) => {
 									<Input
 										size="md"
 										type="text"
+										variant="flat"
 										label="Subdomain"
 										{...register("subdomain")}
 										disabled
 									/>
 									<Textarea
 										label="Data"
+										variant="flat"
 										{...register("data")}
 										isInvalid={!!errors.data}
 										errorMessage={errors.data?.message}
@@ -100,6 +102,7 @@ export const UpdateForm = ({ record, domain }: UpdateFormProps) => {
 									<Input
 										size="md"
 										type="number"
+										variant="flat"
 										label="TTL"
 										{...register("ttl", { min: 300, max: 172800 })}
 										isInvalid={!!errors.ttl}

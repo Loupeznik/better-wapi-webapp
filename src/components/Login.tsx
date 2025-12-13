@@ -55,12 +55,14 @@ export const Login = ({ auth }: PageWithAuthProps) => {
 				<Input
 					type="text"
 					label="Login"
+					variant="flat"
 					data-form-type="username"
 					onChange={handleLoginChange}
 				/>
 				<Input
 					type="password"
 					label="Password"
+					variant="flat"
 					data-form-type="password"
 					onChange={handlePasswordChange}
 				/>

@@ -84,6 +84,7 @@ export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 				<Input
 					size="lg"
 					type="text"
+					variant="flat"
 					id="search"
 					ref={domainRef}
 					defaultValue={activeDomain}
