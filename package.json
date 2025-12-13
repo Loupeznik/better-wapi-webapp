@@ -10,7 +10,7 @@
 		"types:openapi": "openapi -i http://localhost:8000/docs/doc.json -o src/api"
 	},
 	"dependencies": {
-		"@nextui-org/react": "^2.6.10",
+		"@nextui-org/react": "^2.6.11",
 		"@reduxjs/toolkit": "^2.2.7",
 		"@tanstack/react-table": "^8.20.6",
 		"framer-motion": "^11.13.1",
@@ -26,7 +26,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
-		"@tailwindcss/forms": "^0.5.7",
+		"@tailwindcss/forms": "^0.5.10",
 		"@types/js-cookie": "^3.0.6",
 		"@types/node": "^22.13.5",
 		"@types/react": "^18.3.3",
@@ -35,8 +35,13 @@
 		"autoprefixer": "^10.4.20",
 		"openapi-typescript-codegen": "^0.29.0",
 		"postcss": "^8.4.41",
-		"tailwindcss": "^3.4.10",
+		"tailwindcss": "^3.4.19",
 		"typescript": "^5.5.4",
-		"vite": "^5.4.6"
+		"vite": "^5.4.21"
+	},
+	"pnpm": {
+		"overrides": {
+			"glob": ">=10.5.0"
+		}
 	}
 }
