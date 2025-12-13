@@ -34,6 +34,7 @@ export const Navbar = ({ auth }: PageWithAuthProps) => {
 
 	return (
 		<NextNavbar>
+			<NavbarContent justify="start" />
 			<NavbarContent className="hidden sm:flex gap-4" justify="center">
 				{navItems.map((item) => (
 					<NavbarItem key={item.label} isActive={item.isActive}>

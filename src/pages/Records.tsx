@@ -74,7 +74,7 @@ export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 	};
 
 	return isUserLoggedIn ? (
-		<div className="text-center rounded-lg lg:mx-auto mx-4 items-center justify-center my-6 p-4 min-w-full">
+		<div className="text-center rounded-lg lg:mx-auto mx-4 items-center justify-center my-6 p-2 min-w-full">
 			<p>
 				{!activeDomain
 					? "Select domain to list records"

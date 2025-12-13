@@ -24,7 +24,7 @@ function MainLayout({ auth }: PageWithAuthProps) {
 					<UncommitedChangesAlert />
 				</div>
 			)}
-			<Card className="lg:w-3/4 lg:mx-auto my-4 mx-4">
+			<Card className="lg:w-5/6 lg:mx-auto my-4 mx-4 overflow-x-auto">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/new" element={<CreateRecordPage auth={auth} />} />

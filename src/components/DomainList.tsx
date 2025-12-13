@@ -105,10 +105,10 @@ export const DomainList = (props: DomainListProps) => {
 				header: "Data",
 				cell: (info) => {
 					const data = info.cell.getValue();
-					return data && data.length > 50 ? (
+					return data && data.length > 20 ? (
 						<Popover placement="left-end">
 							<PopoverTrigger>
-								<span className="cursor-pointer">{`${data.slice(0, 50)}...`}</span>
+								<span className="cursor-pointer">{`${data.slice(0, 20)}...`}</span>
 							</PopoverTrigger>
 							<PopoverContent>
 								<span className="text-xs max-w-sm overflow-y-auto text-wrap break-all">
@@ -191,7 +191,7 @@ export const DomainList = (props: DomainListProps) => {
 
 	const renderTable = () => {
 		return (
-			<div className="overflow-x-auto rounded-lg min-w-max">
+			<div className="overflow-x-auto rounded-lg">
 				<ColumnFilter
 					setFilteringBy={setFilteringBy}
 					filteringBy={filteringBy}
@@ -272,24 +272,28 @@ export const DomainList = (props: DomainListProps) => {
 					<button
 						onClick={() => table.setPageIndex(0)}
 						disabled={!table.getCanPreviousPage()}
+						className="hover:opacity-70 transition-opacity disabled:opacity-30 disabled:hover:opacity-30"
 					>
 						<FiChevronsLeft />
 					</button>
 					<button
 						onClick={() => table.previousPage()}
 						disabled={!table.getCanPreviousPage()}
+						className="hover:opacity-70 transition-opacity disabled:opacity-30 disabled:hover:opacity-30"
 					>
 						<FiChevronLeft />
 					</button>
 					<button
 						onClick={() => table.nextPage()}
 						disabled={!table.getCanNextPage()}
+						className="hover:opacity-70 transition-opacity disabled:opacity-30 disabled:hover:opacity-30"
 					>
 						<FiChevronRight />
 					</button>
 					<button
 						onClick={() => table.setPageIndex(table.getPageCount() - 1)}
 						disabled={!table.getCanNextPage()}
+						className="hover:opacity-70 transition-opacity disabled:opacity-30 disabled:hover:opacity-30"
 					>
 						<FiChevronsRight />
 					</button>
@@ -353,7 +357,7 @@ const ColumnFilter = ({
 					size="lg"
 					variant="flat"
 					startContent={
-						<FiSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+						<FiSearch className="text-2xl text-default-400 pointer-events-none shrink-0" />
 					}
 					onChange={(e) =>
 						filteringBy !== undefined &&
