@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../app/store";
 import { AuthMode } from "../helpers/ConfigHelpers";
 import type { PageWithAuthProps } from "../models/PageWithAuthProps";
+import { fetchDomains } from "../redux/thunks/domains/fetchDomains";
 import { loginUser } from "../redux/thunks/users/loginUser";
 
 export const Login = ({ auth }: PageWithAuthProps) => {
@@ -21,15 +22,23 @@ export const Login = ({ auth }: PageWithAuthProps) => {
 	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) =>
 		setPassword(event.target.value);
 
-	const handleSubmit = async (event: React.SyntheticEvent) => {
+	const handleSubmit = (event: React.SyntheticEvent) => {
 		event.preventDefault();
 
 		if (login && password) {
-			dispatch(
-				loginUser({
-					credentials: { login, secret: password },
-				}) as unknown as UnknownAction,
-			);
+			(
+				dispatch(
+					loginUser({
+						credentials: { login, secret: password },
+					}) as unknown as UnknownAction,
+				) as unknown as Promise<UnknownAction>
+			)
+				.then((result: UnknownAction) => {
+					if (result.type.endsWith("/fulfilled")) {
+						dispatch(fetchDomains() as unknown as UnknownAction);
+					}
+				})
+				.catch(() => {});
 		}
 	};
 

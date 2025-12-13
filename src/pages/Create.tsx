@@ -14,10 +14,12 @@ import type { RootState } from "../app/store";
 import { Login } from "../components/Login";
 import type { PageWithAuthProps } from "../models/PageWithAuthProps";
 import type { SaveRecordForm } from "../models/SaveRecordForm";
+import { selectActiveDomains } from "../redux/slices/appSlice";
 import { addRecord } from "../redux/thunks/records/addRecord";
 
 export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 	const currentDomain = useSelector((state: RootState) => state.domain.domain);
+	const activeDomains = useSelector(selectActiveDomains);
 	const isUserLoggedIn = useSelector(
 		(state: RootState) => state.user.isLoggedIn,
 	);
@@ -50,16 +52,20 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 				onSubmit={handleSubmit(onSubmit)}
 				className="flex flex-col w-full max-w-lg pb-12 pt-2 px-8 rounded mx-auto gap-4"
 			>
-				<Input
-					type="text"
+				<Select
 					label="Domain"
 					variant="flat"
-					defaultValue={currentDomain}
+					placeholder="Select a domain"
+					defaultSelectedKeys={currentDomain ? [currentDomain] : []}
 					{...register("domain", { required: true })}
 					isInvalid={!!errors.domain}
 					errorMessage={errors.domain?.message}
 					isRequired
-				/>
+				>
+					{activeDomains.map((d) => (
+						<SelectItem key={d.name || ""}>{d.name}</SelectItem>
+					))}
+				</Select>
 				<Input
 					type="text"
 					label="Subdomain"
@@ -94,11 +100,7 @@ export const CreateRecordPage = ({ auth }: PageWithAuthProps) => {
 					isInvalid={!!errors.request?.type}
 				>
 					{Object.keys(models_RecordType).map((key) => {
-						return (
-							<SelectItem key={key}>
-								{key}
-							</SelectItem>
-						);
+						return <SelectItem key={key}>{key}</SelectItem>;
 					})}
 				</Select>
 				<Checkbox

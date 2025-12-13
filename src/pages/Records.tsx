@@ -1,25 +1,29 @@
-import { Button, Input } from "@heroui/react";
+import { Button, Select, SelectItem, type Selection } from "@heroui/react";
 import type { UnknownAction } from "@reduxjs/toolkit";
-import { createRef, useEffect } from "react";
+import { useEffect } from "react";
+import { IoMdRefresh } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import type { models_DeleteRowRequestV2 } from "../api";
 import type { RootState } from "../app/store";
 import { DomainList } from "../components/DomainList";
 import { Login } from "../components/Login";
 import type { PageWithAuthProps } from "../models/PageWithAuthProps";
+import { selectActiveDomains } from "../redux/slices/appSlice";
 import { domainSlice } from "../redux/slices/domainSlice";
+import { fetchDomains } from "../redux/thunks/domains/fetchDomains";
 import { deleteRecord } from "../redux/thunks/records/deleteRecord";
 import { fetchRecords } from "../redux/thunks/records/fetchRecords";
 
 export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 	const domain = useSelector((state: RootState) => state.domain);
+	const activeDomains = useSelector(selectActiveDomains);
 	const isUserLoggedIn = useSelector(
 		(state: RootState) => state.user.isLoggedIn,
 	);
 	const dispatch = useDispatch();
 
-	const domainRef = createRef<HTMLInputElement>();
 	const activeDomain = domain.domain;
+	const domainExists = activeDomains.some((d) => d.name === activeDomain);
 
 	useEffect(() => {
 		if (domain.shouldFetchRecords) {
@@ -46,11 +50,15 @@ export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 		domain.shouldFetchRecords,
 	]);
 
-	const handleDomainChange = async () => {
-		if (domainRef.current) {
-			const domain = domainRef.current.value;
-			dispatch(domainSlice.actions.changeDomain(domain));
+	const handleDomainChange = (keys: Selection) => {
+		const selected = Array.from(keys)[0] as string;
+		if (selected) {
+			dispatch(domainSlice.actions.changeDomain(selected));
 		}
+	};
+
+	const handleRefreshDomains = () => {
+		dispatch(fetchDomains() as unknown as UnknownAction);
 	};
 
 	const handleDeleteRecord = async (subdomain: string, id: number) => {
@@ -80,22 +88,33 @@ export const RecordsPage = ({ auth }: PageWithAuthProps) => {
 					? "Select domain to list records"
 					: `Listing records for domain ${activeDomain}`}
 			</p>
-			<div className="flex flex-col lg:flex-row items-center gap-2 justify-center space-x-4 mt-2">
-				<Input
+			<div className="flex flex-row items-center gap-2 justify-center mt-2 w-full px-4">
+				<Select
 					size="lg"
-					type="text"
 					variant="flat"
-					id="search"
-					ref={domainRef}
-					defaultValue={activeDomain}
-					onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-						if (event.key === "Enter") {
-							handleDomainChange();
-						}
-					}}
-				/>
-				<Button size="lg" variant="ghost" onPress={handleDomainChange}>
-					Search
+					label="Domain"
+					placeholder="Select a domain"
+					selectedKeys={
+						activeDomain && domainExists ? new Set([activeDomain]) : new Set()
+					}
+					onSelectionChange={handleDomainChange}
+					className="w-3/4"
+					disallowEmptySelection
+				>
+					{activeDomains.map((d) => (
+						<SelectItem key={d.name || ""} textValue={d.name}>
+							{d.name}
+						</SelectItem>
+					))}
+				</Select>
+				<Button
+					isIconOnly
+					size="lg"
+					variant="ghost"
+					onPress={handleRefreshDomains}
+					aria-label="Refresh domains"
+				>
+					<IoMdRefresh size={24} />
 				</Button>
 			</div>
 

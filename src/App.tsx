@@ -1,8 +1,10 @@
 import { Spinner } from "@heroui/react";
+import type { UnknownAction } from "@reduxjs/toolkit";
 import { AuthProvider, type AuthProviderProps } from "oidc-react";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { OpenAPI } from "./api";
+import type { RootState } from "./app/store";
 import MainLayout from "./components/MainLayout";
 import OAuthWrapper from "./components/OAuthWrapper";
 import loadConfig, {
@@ -12,6 +14,7 @@ import loadConfig, {
 } from "./helpers/ConfigHelpers";
 import { appSlice } from "./redux/slices/appSlice";
 import { userSlice } from "./redux/slices/userSlice";
+import { fetchDomains } from "./redux/thunks/domains/fetchDomains";
 import { isNoUOrEmptyString } from "./utils";
 
 function App() {
@@ -19,6 +22,7 @@ function App() {
 	const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
 	const [oidcConfig, setOidcConfig] = useState<AuthProviderProps | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
 	const onSignInHook = useCallback(() => {
 		dispatch(userSlice.actions.loginOAuth());
@@ -54,6 +58,12 @@ function App() {
 			dispatch(userSlice.actions.checkIfLoggedIn());
 		}
 	}, [appConfig, dispatch]);
+
+	useEffect(() => {
+		if (isLoggedIn && appConfig) {
+			dispatch(fetchDomains() as unknown as UnknownAction);
+		}
+	}, [isLoggedIn, appConfig, dispatch]);
 
 	return isLoading ? (
 		<Spinner size="lg" />
