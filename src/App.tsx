@@ -12,6 +12,7 @@ import loadConfig, {
 	getOidcConfig,
 	type AppConfig,
 } from "./helpers/ConfigHelpers";
+import { getCurrentAccessToken } from "./helpers/OAuthTokenManager";
 import { appSlice } from "./redux/slices/appSlice";
 import { userSlice } from "./redux/slices/userSlice";
 import { fetchDomains } from "./redux/thunks/domains/fetchDomains";
@@ -37,6 +38,11 @@ function App() {
 			try {
 				const config = await loadConfig();
 				OpenAPI.BASE = config.API_BASE_URL;
+
+				if (config.AUTH_MODE === AuthMode.OAUTH2) {
+					OpenAPI.TOKEN = getCurrentAccessToken;
+				}
+
 				setAppConfig(config);
 				dispatch(appSlice.actions.setConfig(config));
 

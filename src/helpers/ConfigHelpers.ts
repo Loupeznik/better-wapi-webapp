@@ -1,5 +1,4 @@
 import type { AuthProviderProps } from "oidc-react";
-import { OpenAPI } from "../api";
 
 export enum AuthMode {
 	BASIC = "basic",
@@ -31,8 +30,7 @@ export const getOidcConfig = (
 		redirectUri: config.OAUTH2_REDIRECT_URI,
 		scope: "openid profile email",
 		postLogoutRedirectUri: window.location.origin,
-		onSignIn: (user) => {
-			OpenAPI.TOKEN = user?.access_token;
+		onSignIn: () => {
 			onSignInHook();
 			window.history.replaceState(
 				{},
