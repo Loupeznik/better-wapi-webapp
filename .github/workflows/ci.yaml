@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          npm install -g pnpm
+          npm install -g pnpm@9
           pnpm install
 
       - name: Build
